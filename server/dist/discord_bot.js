@@ -8,7 +8,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Discord = __importStar(require("discord.js"));
-var dcConfig = require('../config/discord.json');
+var dotenv = __importStar(require("dotenv"));
+var config = dotenv.config({ path: '../config/.env' });
 var dcClient = new Discord.Client();
 var PREFIX = '!';
 var commands = {
@@ -44,4 +45,4 @@ dcClient.on('message', function (message) {
         return;
     commands[command].action(message);
 });
-exports.login_bot = function () { return dcClient.login(dcConfig.bot_token); };
+exports.login_bot = function () { var _a; return dcClient.login((_a = config.parsed) === null || _a === void 0 ? void 0 : _a.BOT_TOKEN); };

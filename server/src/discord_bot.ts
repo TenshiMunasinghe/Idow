@@ -1,6 +1,7 @@
 import * as Discord from 'discord.js'
+import * as dotenv from 'dotenv'
 
-const dcConfig = require('../config/discord.json')
+const config = dotenv.config({ path: '../config/.env' })
 
 const dcClient = new Discord.Client()
 
@@ -47,4 +48,4 @@ dcClient.on('message', message => {
   commands[command as Commands].action(message)
 })
 
-export const login_bot = () => dcClient.login(dcConfig.bot_token)
+export const login_bot = () => dcClient.login(config.parsed?.BOT_TOKEN)
