@@ -1,7 +1,9 @@
-const cocApi = require('clash-of-clans-api')
+import * as dotenv from 'dotenv'
 
-const cocConfig = require('../config/coc.json')
+const clashApi = require('clash-of-clans-api')
 
-const cocClient = cocApi({ token: cocConfig.api_token })
+const config = dotenv.config({ path: '../config/.env' })
 
-const nf = cocClient.clanByTag(cocConfig.clan_tag)
+export const cocClient = clashApi({
+  token: config.parsed?.COC_API_TOKEN,
+})
