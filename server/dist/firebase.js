@@ -12,7 +12,7 @@ var serviceAccount = require('../config/firebase.json');
 firebase.initializeApp({
     credential: firebase.credential.cert(serviceAccount),
 });
-firebase.initializeApp({
-    credential: firebase.credential.cert(serviceAccount),
-});
-var db = firebase.firestore();
+exports.db = firebase.firestore();
+exports.toTimeStamp = function (date) {
+    return firebase.firestore.Timestamp.fromDate(date);
+};
