@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv'
 import { cocClient } from './coc_api'
 import { db } from './firebase'
 
-const config = dotenv.config({ path: '../config/.env' })
+const config = dotenv.config({ path: '../../config/.env' })
 
 export const presenceCheck = async (warId: string) => {
   try {

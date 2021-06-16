@@ -8,7 +8,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var firebase = __importStar(require("firebase-admin"));
-var serviceAccount = require('../config/firebase.json');
+var serviceAccount = require('../../config/firebase.json');
 firebase.initializeApp({
     credential: firebase.credential.cert(serviceAccount),
 });

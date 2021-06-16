@@ -46,7 +46,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var dotenv = __importStar(require("dotenv"));
 var coc_api_1 = require("./coc_api");
 var firebase_1 = require("./firebase");
-var config = dotenv.config({ path: '../config/.env' });
+var config = dotenv.config({ path: '../../config/.env' });
 exports.presenceCheck = function (warId) { return __awaiter(void 0, void 0, void 0, function () {
     var roaster, members_1, e_1;
     var _a, _b;
