@@ -1,7 +1,7 @@
 import express from 'express'
-import { cocClient } from './coc_api'
-import { login_bot } from './discord_bot'
-import { db, toTimeStamp } from './firebase'
+import { cocClient } from './utils/coc_api'
+import { login_bot } from './utils/discord_bot'
+import { db, toTimeStamp } from './utils/firebase'
 
 const app = express()
 
@@ -15,7 +15,10 @@ app.get('/api/players', async (req, res, next) => {
   console.log(tags)
 
   const players: any = await Promise.all(
-    tags.map(t => cocClient.playerByTag(t))
+    tags.map(t => {
+      const { name, townHallLevel, clan } = cocClient.playerByTag(t)
+      return { name, townHallLevel, clan }
+    })
   )
   res.json(players)
 })

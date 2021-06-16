@@ -51,9 +51,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
-var coc_api_1 = require("./coc_api");
-var discord_bot_1 = require("./discord_bot");
-var firebase_1 = require("./firebase");
+var coc_api_1 = require("./utils/coc_api");
+var discord_bot_1 = require("./utils/discord_bot");
+var firebase_1 = require("./utils/firebase");
 var app = express_1.default();
 app.use(express_1.default.json());
 app.listen(5000);
@@ -66,7 +66,10 @@ app.get('/api/players', function (req, res, next) { return __awaiter(void 0, voi
                 snapshot = _a.sent();
                 tags = snapshot.docs.map(function (s) { return s.data().player_tag; });
                 console.log(tags);
-                return [4 /*yield*/, Promise.all(tags.map(function (t) { return coc_api_1.cocClient.playerByTag(t); }))];
+                return [4 /*yield*/, Promise.all(tags.map(function (t) {
+                        var _a = coc_api_1.cocClient.playerByTag(t), name = _a.name, townHallLevel = _a.townHallLevel, clan = _a.clan;
+                        return { name: name, townHallLevel: townHallLevel, clan: clan };
+                    }))];
             case 2:
                 players = _a.sent();
                 res.json(players);
