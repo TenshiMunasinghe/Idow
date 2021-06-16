@@ -67,7 +67,7 @@ var commands = {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, firebase_1.db
                                 .collection('roasters')
-                                .where('spin_time', '<', firebase_1.toTimeStamp(new Date()))
+                                .where('spin_time', '>', firebase_1.toTimeStamp(new Date()))
                                 .get()];
                         case 1:
                             wars = _a.sent();

@@ -32,7 +32,7 @@ const commands: Commands = {
     async action(message) {
       const wars = await db
         .collection('roasters')
-        .where('spin_time', '<', toTimeStamp(new Date()))
+        .where('spin_time', '>', toTimeStamp(new Date()))
         .get()
 
       const text = wars.docs
