@@ -22,12 +22,6 @@ var commands = {
         },
         description: 'コマンド一覧',
     },
-    greet: {
-        action: function (message) {
-            console.log('yo');
-        },
-        description: 'やっはろー！',
-    },
 };
 var commandKeys = Object.keys(commands);
 dcClient.on('message', function (message) {

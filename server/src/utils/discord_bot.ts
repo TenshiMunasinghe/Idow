@@ -7,30 +7,44 @@ const dcClient = new Discord.Client()
 
 const PREFIX = '!'
 
-const commands = {
+type Commands = {
+  [key: string]: {
+    action: (message: Discord.Message, args?: string[]) => void
+    description: string
+  }
+}
+
+const commands: Commands = {
   commands: {
-    action(message: Discord.Message) {
+    action(message) {
       message.channel.send(
         '__**コマンド一覧**__\n' +
           commandKeys
-            .map(
-              key => `\`!${key}\` - ${commands[key as Commands].description}`
-            )
+            .map(key => `\`!${key}\` - ${commands[key].description}`)
             .join('\n')
       )
     },
     description: 'コマンド一覧',
   },
-  greet: {
-    action(message: Discord.Message) {
-      console.log('yo')
-    },
-    description: 'やっはろー！',
-  },
+
+  // wars: {
+  //   async action(message) {
+  //     const wars = (await db.collection('roasters').where('spin_time'))).docs
+
+  //   },
+  //   description: '対戦一覧'
+  // },
+
+  // idow: {
+  //   async action(message, args) {
+  //     if(!args) {
+  //       message.channel
+  //     }
+  //     const members = await presenceCheck()
+  //   },
+  //   description: '移動確認',
+  // },
 }
-
-type Commands = keyof typeof commands
-
 const commandKeys = Object.keys(commands)
 
 dcClient.on('message', message => {
@@ -45,7 +59,7 @@ dcClient.on('message', message => {
 
   if (!command) return
 
-  commands[command as Commands].action(message)
+  commands[command].action(message)
 })
 
 export const login_bot = () => dcClient.login(config.parsed?.BOT_TOKEN)
