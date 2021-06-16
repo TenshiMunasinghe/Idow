@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js'
 import * as dotenv from 'dotenv'
+import { db, toTimeStamp } from './firebase'
 
 const config = dotenv.config({ path: '../config/.env' })
 
@@ -27,13 +28,26 @@ const commands: Commands = {
     description: 'コマンド一覧',
   },
 
-  // wars: {
-  //   async action(message) {
-  //     const wars = (await db.collection('roasters').where('spin_time'))).docs
+  wars: {
+    async action(message) {
+      const wars = await db
+        .collection('roasters')
+        .where('spin_time', '<', toTimeStamp(new Date()))
+        .get()
 
-  //   },
-  //   description: '対戦一覧'
-  // },
+      const text = wars.docs
+        .map(w => `vs ${w.data().opponent}\nWar_ID - ${w.id}`)
+        .join('\n\n')
+
+      message.channel.send(text)
+    },
+    description: '対戦一覧: <War_ID>',
+  },
+
+  roasters: {
+    async action(message, args) {},
+    description: '参加メンバー一覧: <War_ID>',
+  },
 
   // idow: {
   //   async action(message, args) {
@@ -54,12 +68,24 @@ dcClient.on('message', message => {
   const commandBody = message.content.slice(PREFIX.length)
 
   if (!commandBody) return
+
   const args = commandBody.split(' ')
   const command = args.shift()?.toLowerCase()
 
   if (!command) return
 
+  if (!Object.keys(commands).includes(command)) {
+    message.channel.send('(そんなコマンド)ないです。')
+    return
+  }
+
   commands[command].action(message)
 })
 
-export const login_bot = () => dcClient.login(config.parsed?.BOT_TOKEN)
+export const login_bot = async () => {
+  try {
+    await dcClient.login(config.parsed?.BOT_TOKEN)
+  } catch (e) {
+    console.error(e)
+  }
+}

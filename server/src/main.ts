@@ -28,5 +28,6 @@ app.post('/api/roasters', (req, res, next) => {
   db.collection('roasters').add({ response })
   res.json(response)
 })
-
-login_bot()
+;(async () => {
+  await login_bot()
+})()
