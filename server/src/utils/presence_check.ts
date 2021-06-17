@@ -1,20 +1,8 @@
 import * as dotenv from 'dotenv'
-import { cocClient } from './coc_api'
-import { db } from './firebase'
+import { Player } from './get_players_details'
 
-const config = dotenv.config({ path: '../../config/.env' })
+const config = dotenv.config({ path: '../config/.env' })
 
-export const presenceCheck = async (warId: string) => {
-  try {
-    const roaster = await (
-      await db.collection('roasters').doc(warId).get()
-    ).data()?.members
-    const members = (
-      await cocClient.clanMembersByTag(config.parsed?.CLAN_TAG)
-    ).items.map((p: any) => p.tag)
-
-    return roaster.filter((m: string) => !members.includes(m))
-  } catch (e) {
-    console.error(e)
-  }
+export const presenceCheck = (roaster: Player[]) => {
+  return roaster.filter(m => m.clan.tag !== config.parsed?.CLAN_TAG)
 }
