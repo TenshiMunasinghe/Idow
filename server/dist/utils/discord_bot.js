@@ -46,9 +46,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Discord = __importStar(require("discord.js"));
 var dotenv = __importStar(require("dotenv"));
 var firebase_1 = require("./firebase");
+var get_players_details_1 = require("./get_players_details");
+var presence_check_1 = require("./presence_check");
 var config = dotenv.config({ path: '../config/.env' });
 var dcClient = new Discord.Client();
 var PREFIX = '!';
+var handleWar = function (message, args) { return __awaiter(void 0, void 0, void 0, function () {
+    var war;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!args || args.length === 0) {
+                    message.channel.send('War_IDを入力してください\n例: !roaster <War_ID>');
+                    return [2 /*return*/];
+                }
+                return [4 /*yield*/, firebase_1.db.collection('roasters').doc(args[0]).get()];
+            case 1:
+                war = _a.sent();
+                if (!war.exists || !war.data()) {
+                    message.channel.send('(そんなWar_IDは)ないです。');
+                    return [2 /*return*/];
+                }
+                return [4 /*yield*/, get_players_details_1.getPlayerDetails(war.data())];
+            case 2: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
 var commands = {
     commands: {
         action: function (message) {
@@ -82,13 +105,52 @@ var commands = {
         },
         description: '対戦一覧: <War_ID>',
     },
-    roasters: {
+    roaster: {
         action: function (message, args) {
-            return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-                return [2 /*return*/];
-            }); });
+            return __awaiter(this, void 0, void 0, function () {
+                var roaster;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, handleWar(message, args)];
+                        case 1:
+                            roaster = _a.sent();
+                            if (!roaster)
+                                return [2 /*return*/];
+                            message.channel.send(roaster.map(function (_a) {
+                                var name = _a.name, clan = _a.clan;
+                                return name + " @ " + clan.name;
+                            }).join('\n'));
+                            return [2 /*return*/];
+                    }
+                });
+            });
         },
         description: '参加メンバー一覧: <War_ID>',
+    },
+    idow: {
+        action: function (message, args) {
+            return __awaiter(this, void 0, void 0, function () {
+                var roaster, absentPlayers, absentCount, text;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, handleWar(message, args)];
+                        case 1:
+                            roaster = _a.sent();
+                            if (!roaster)
+                                return [2 /*return*/];
+                            absentPlayers = presence_check_1.presenceCheck(roaster);
+                            absentCount = absentPlayers.length;
+                            text = absentCount === 0
+                                ? '全員集合してます！'
+                                : absentPlayers.map(function (p) { return p.name + " @ " + p.clan.name; }).join('\n') +
+                                    ("\n" + absentCount + "\u4EBA\u3044\u306A\u3044\u3067\u3059\u3002");
+                            message.channel.send(text);
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        },
+        description: '移動確認',
     },
 };
 var commandKeys = Object.keys(commands);
@@ -109,7 +171,7 @@ dcClient.on('message', function (message) {
         message.channel.send('(そんなコマンド)ないです。');
         return;
     }
-    commands[command].action(message);
+    commands[command].action(message, args);
 });
 exports.login_bot = function () { return __awaiter(void 0, void 0, void 0, function () {
     var e_1;

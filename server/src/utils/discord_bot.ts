@@ -1,6 +1,8 @@
 import * as Discord from 'discord.js'
 import * as dotenv from 'dotenv'
 import { db, toTimeStamp } from './firebase'
+import { getPlayerDetails } from './get_players_details'
+import { presenceCheck } from './presence_check'
 
 const config = dotenv.config({ path: '../config/.env' })
 
@@ -13,6 +15,21 @@ type Commands = {
     action: (message: Discord.Message, args?: string[]) => void
     description: string
   }
+}
+
+const handleWar = async (message: Discord.Message, args?: string[]) => {
+  if (!args || args.length === 0) {
+    message.channel.send('War_IDを入力してください\n例: !roaster <War_ID>')
+    return
+  }
+  const war = await db.collection('roasters').doc(args[0]).get()
+
+  if (!war.exists || !war.data()) {
+    message.channel.send('(そんなWar_IDは)ないです。')
+    return
+  }
+
+  return await getPlayerDetails(war.data())
 }
 
 const commands: Commands = {
@@ -44,20 +61,37 @@ const commands: Commands = {
     description: '対戦一覧: <War_ID>',
   },
 
-  roasters: {
-    async action(message, args) {},
+  roaster: {
+    async action(message, args) {
+      const roaster = await handleWar(message, args)
+      if (!roaster) return
+
+      message.channel.send(
+        roaster.map(({ name, clan }) => `${name} @ ${clan.name}`).join('\n')
+      )
+    },
     description: '参加メンバー一覧: <War_ID>',
   },
 
-  // idow: {
-  //   async action(message, args) {
-  //     if(!args) {
-  //       message.channel
-  //     }
-  //     const members = await presenceCheck()
-  //   },
-  //   description: '移動確認',
-  // },
+  idow: {
+    async action(message, args) {
+      const roaster = await handleWar(message, args)
+      if (!roaster) return
+
+      const absentPlayers = presenceCheck(roaster)
+
+      const absentCount = absentPlayers.length
+
+      const text =
+        absentCount === 0
+          ? '全員集合してます！'
+          : absentPlayers.map(p => `${p.name} @ ${p.clan.name}`).join('\n') +
+            `\n${absentCount}人いないです。`
+
+      message.channel.send(text)
+    },
+    description: '移動確認',
+  },
 }
 const commandKeys = Object.keys(commands)
 
@@ -79,7 +113,7 @@ dcClient.on('message', message => {
     return
   }
 
-  commands[command].action(message)
+  commands[command].action(message, args)
 })
 
 export const login_bot = async () => {
