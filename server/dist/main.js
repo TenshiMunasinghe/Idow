@@ -57,7 +57,7 @@ var firebase_1 = require("./utils/firebase");
 var app = express_1.default();
 app.use(express_1.default.json());
 app.listen(5000);
-app.get('/api/players', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+app.get('/api/players', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var snapshot, tags, players;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -77,7 +77,7 @@ app.get('/api/players', function (req, res, next) { return __awaiter(void 0, voi
         }
     });
 }); });
-app.post('/api/roasters', function (req, res, next) {
+app.post('/api/roasters', function (req, res) {
     var response = __assign(__assign({}, req.body), { date: firebase_1.toTimeStamp(new Date()) });
     firebase_1.db.collection('wars').add({ response: response });
     res.json(response);
@@ -92,3 +92,18 @@ app.post('/api/roasters', function (req, res, next) {
         }
     });
 }); })();
+app.get('/api/wars', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var wars;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, firebase_1.db
+                    .collection('wars')
+                    .where('spin_time', '>', firebase_1.toTimeStamp(new Date()))
+                    .get()];
+            case 1:
+                wars = _a.sent();
+                res.json(wars.docs.map(function (d) { return (__assign(__assign({}, d.data()), { spin_time: d.data().spin_time.toDate() })); }));
+                return [2 /*return*/];
+        }
+    });
+}); });

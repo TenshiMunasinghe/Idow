@@ -9,7 +9,7 @@ app.use(express.json())
 
 app.listen(5000)
 
-app.get('/api/players', async (req, res, next) => {
+app.get('/api/players', async (req, res) => {
   const snapshot = await db.collection('players').get()
   const tags = snapshot.docs.map(s => s.data().player_tag)
   console.log(tags)
@@ -23,7 +23,7 @@ app.get('/api/players', async (req, res, next) => {
   res.json(players)
 })
 
-app.post('/api/roasters', (req, res, next) => {
+app.post('/api/roasters', (req, res) => {
   const response = { ...req.body, date: toTimeStamp(new Date()) }
   db.collection('wars').add({ response })
   res.json(response)
@@ -31,3 +31,17 @@ app.post('/api/roasters', (req, res, next) => {
 ;(async () => {
   await login_bot()
 })()
+
+app.get('/api/wars', async (req, res) => {
+  const wars = await db
+    .collection('wars')
+    .where('spin_time', '>', toTimeStamp(new Date()))
+    .get()
+
+  res.json(
+    wars.docs.map(d => ({
+      ...d.data(),
+      spin_time: d.data().spin_time.toDate(),
+    }))
+  )
+})
