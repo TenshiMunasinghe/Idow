@@ -13,7 +13,7 @@ export const getPlayerDetails = async (
 ) => {
   if (!war) return
 
-  const roaster: Promise<Player>[] = war.members.map(async (m: string) => {
+  const roaster: Promise<Player>[] = war.roaster.map(async (m: string) => {
     return (await cocClient.playerByTag(m)) as Player
   })
 

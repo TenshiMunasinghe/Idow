@@ -57,7 +57,7 @@ var getPlayerDetails = function (war) { return __awaiter(void 0, void 0, void 0,
             case 0:
                 if (!war)
                     return [2 /*return*/];
-                roaster = war.members.map(function (m) { return __awaiter(void 0, void 0, void 0, function () {
+                roaster = war.roaster.map(function (m) { return __awaiter(void 0, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0: return [4 /*yield*/, coc_api_1.cocClient.playerByTag(m)];
