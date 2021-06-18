@@ -2,6 +2,12 @@ import { cocClient } from './coc_api'
 
 export type Player = { [key: string]: any }
 
+type War = {
+  opponent: string
+  spin_time: any
+  roaster: Player[]
+}
+
 export const getPlayerDetails = async (
   war?: FirebaseFirestore.DocumentData
 ) => {
@@ -11,5 +17,5 @@ export const getPlayerDetails = async (
     return (await cocClient.playerByTag(m)) as Player
   })
 
-  return await Promise.all(roaster)
+  return { ...war, roaster: await Promise.all(roaster) } as War
 }
