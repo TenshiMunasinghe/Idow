@@ -2,6 +2,8 @@ import * as firebase from 'firebase-admin'
 
 const serviceAccount = require('../../config/firebase.json')
 
+export type TimeStamp = firebase.firestore.Timestamp
+
 firebase.initializeApp({
   credential: firebase.credential.cert(serviceAccount),
 })

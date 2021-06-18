@@ -1,10 +1,11 @@
 import { cocClient } from './coc_api'
+import { TimeStamp } from './firebase'
 
 export type Player = { [key: string]: any }
 
-type War = {
+export interface War {
   opponent: string
-  spin_time: any
+  spin_time: TimeStamp
   roaster: Player[]
 }
 
