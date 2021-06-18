@@ -70,7 +70,7 @@ const commands: Commands = {
       message.channel.send(
         `vs ${war.opponent}` +
           war.roaster
-            .map(({ name, clan }) => `${name} @ ${clan.name}`)
+            .map(({ name, clan }) => `**${name}** @ ${clan.name}`)
             .join('\n')
       )
     },
@@ -90,8 +90,9 @@ const commands: Commands = {
       const text =
         absentCount === 0
           ? '全員集合してます！'
-          : absentPlayers.map(p => `${p.name} @ ${p.clan.name}`).join('\n') +
-            `\n${absentCount}人いないです。`
+          : absentPlayers
+              .map(p => `**${p.name}** @ ${p.clan.name}`)
+              .join('\n') + `\n**${absentCount}人**いないです。`
 
       message.channel.send(text)
     },

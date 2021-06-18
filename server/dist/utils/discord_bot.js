@@ -133,7 +133,7 @@ var commands = {
                                 war.roaster
                                     .map(function (_a) {
                                     var name = _a.name, clan = _a.clan;
-                                    return name + " @ " + clan.name;
+                                    return "**" + name + "** @ " + clan.name;
                                 })
                                     .join('\n'));
                             return [2 /*return*/];
@@ -158,8 +158,9 @@ var commands = {
                             absentCount = absentPlayers.length;
                             text = absentCount === 0
                                 ? '全員集合してます！'
-                                : absentPlayers.map(function (p) { return p.name + " @ " + p.clan.name; }).join('\n') +
-                                    ("\n" + absentCount + "\u4EBA\u3044\u306A\u3044\u3067\u3059\u3002");
+                                : absentPlayers
+                                    .map(function (p) { return "**" + p.name + "** @ " + p.clan.name; })
+                                    .join('\n') + ("\n**" + absentCount + "\u4EBA**\u3044\u306A\u3044\u3067\u3059\u3002");
                             message.channel.send(text);
                             return [2 /*return*/];
                     }
