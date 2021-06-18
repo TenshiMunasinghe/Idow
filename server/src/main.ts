@@ -25,7 +25,7 @@ app.get('/api/players', async (req, res, next) => {
 
 app.post('/api/roasters', (req, res, next) => {
   const response = { ...req.body, date: toTimeStamp(new Date()) }
-  db.collection('roasters').add({ response })
+  db.collection('wars').add({ response })
   res.json(response)
 })
 ;(async () => {

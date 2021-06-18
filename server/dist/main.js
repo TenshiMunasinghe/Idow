@@ -79,7 +79,7 @@ app.get('/api/players', function (req, res, next) { return __awaiter(void 0, voi
 }); });
 app.post('/api/roasters', function (req, res, next) {
     var response = __assign(__assign({}, req.body), { date: firebase_1.toTimeStamp(new Date()) });
-    firebase_1.db.collection('roasters').add({ response: response });
+    firebase_1.db.collection('wars').add({ response: response });
     res.json(response);
 });
 (function () { return __awaiter(void 0, void 0, void 0, function () {
