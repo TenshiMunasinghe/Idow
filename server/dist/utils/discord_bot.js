@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,24 +54,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.login_bot = void 0;
 var Discord = __importStar(require("discord.js"));
-var dotenv = __importStar(require("dotenv"));
+var config_1 = require("./config");
 var firebase_1 = require("./firebase");
 var get_players_details_1 = require("./get_players_details");
 var presence_check_1 = require("./presence_check");
-var config = dotenv.config({ path: '../config/.env' });
 var dcClient = new Discord.Client();
 var PREFIX = '!';
 var handleWar = function (message, args) { return __awaiter(void 0, void 0, void 0, function () {
-    var war;
+    var war, data;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -60,14 +72,15 @@ var handleWar = function (message, args) { return __awaiter(void 0, void 0, void
                     message.channel.send('War_IDを入力してください\n例: !roaster <War_ID>');
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, firebase_1.db.collection('roasters').doc(args[0]).get()];
+                return [4 /*yield*/, firebase_1.db.collection('wars').doc(args[0]).get()];
             case 1:
                 war = _a.sent();
-                if (!war.exists || !war.data()) {
+                data = war.data();
+                if (!war.exists || !data) {
                     message.channel.send('(そんなWar_IDは)ないです。');
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, get_players_details_1.getPlayerDetails(war.data())];
+                return [4 /*yield*/, get_players_details_1.getPlayerDetails(data)];
             case 2: return [2 /*return*/, _a.sent()];
         }
     });
@@ -89,7 +102,7 @@ var commands = {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, firebase_1.db
-                                .collection('roasters')
+                                .collection('wars')
                                 .where('spin_time', '>', firebase_1.toTimeStamp(new Date()))
                                 .get()];
                         case 1:
@@ -108,18 +121,21 @@ var commands = {
     roaster: {
         action: function (message, args) {
             return __awaiter(this, void 0, void 0, function () {
-                var roaster;
+                var war;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, handleWar(message, args)];
                         case 1:
-                            roaster = _a.sent();
-                            if (!roaster)
+                            war = _a.sent();
+                            if (!war || !war.roaster)
                                 return [2 /*return*/];
-                            message.channel.send(roaster.map(function (_a) {
-                                var name = _a.name, clan = _a.clan;
-                                return name + " @ " + clan.name;
-                            }).join('\n'));
+                            message.channel.send("vs " + war.opponent +
+                                war.roaster
+                                    .map(function (_a) {
+                                    var name = _a.name, clan = _a.clan;
+                                    return name + " @ " + clan.name;
+                                })
+                                    .join('\n'));
                             return [2 /*return*/];
                     }
                 });
@@ -130,15 +146,15 @@ var commands = {
     idow: {
         action: function (message, args) {
             return __awaiter(this, void 0, void 0, function () {
-                var roaster, absentPlayers, absentCount, text;
+                var war, absentPlayers, absentCount, text;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, handleWar(message, args)];
                         case 1:
-                            roaster = _a.sent();
-                            if (!roaster)
+                            war = _a.sent();
+                            if (!war || !war.roaster)
                                 return [2 /*return*/];
-                            absentPlayers = presence_check_1.presenceCheck(roaster);
+                            absentPlayers = presence_check_1.presenceCheck(war.roaster);
                             absentCount = absentPlayers.length;
                             text = absentCount === 0
                                 ? '全員集合してます！'
@@ -173,22 +189,22 @@ dcClient.on('message', function (message) {
     }
     commands[command].action(message, args);
 });
-exports.login_bot = function () { return __awaiter(void 0, void 0, void 0, function () {
+var login_bot = function () { return __awaiter(void 0, void 0, void 0, function () {
     var e_1;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                _b.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, dcClient.login((_a = config.parsed) === null || _a === void 0 ? void 0 : _a.BOT_TOKEN)];
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, dcClient.login(config_1.parsed === null || config_1.parsed === void 0 ? void 0 : config_1.parsed.BOT_TOKEN)];
             case 1:
-                _b.sent();
+                _a.sent();
                 return [3 /*break*/, 3];
             case 2:
-                e_1 = _b.sent();
+                e_1 = _a.sent();
                 console.error(e_1);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); };
+exports.login_bot = login_bot;

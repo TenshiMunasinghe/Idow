@@ -1,10 +1,8 @@
 import * as Discord from 'discord.js'
-import * as dotenv from 'dotenv'
+import { parsed } from './config'
 import { db, toTimeStamp } from './firebase'
 import { getPlayerDetails } from './get_players_details'
 import { presenceCheck } from './presence_check'
-
-const config = dotenv.config({ path: '../config/.env' })
 
 const dcClient = new Discord.Client()
 
@@ -22,14 +20,16 @@ const handleWar = async (message: Discord.Message, args?: string[]) => {
     message.channel.send('War_IDを入力してください\n例: !roaster <War_ID>')
     return
   }
-  const war = await db.collection('roasters').doc(args[0]).get()
+  const war = await db.collection('wars').doc(args[0]).get()
 
-  if (!war.exists || !war.data()) {
+  const data = war.data()
+
+  if (!war.exists || !data) {
     message.channel.send('(そんなWar_IDは)ないです。')
     return
   }
 
-  return await getPlayerDetails(war.data())
+  return await getPlayerDetails(data)
 }
 
 const commands: Commands = {
@@ -48,7 +48,7 @@ const commands: Commands = {
   wars: {
     async action(message) {
       const wars = await db
-        .collection('roasters')
+        .collection('wars')
         .where('spin_time', '>', toTimeStamp(new Date()))
         .get()
 
@@ -63,11 +63,15 @@ const commands: Commands = {
 
   roaster: {
     async action(message, args) {
-      const roaster = await handleWar(message, args)
-      if (!roaster) return
+      const war = await handleWar(message, args)
+
+      if (!war || !war.roaster) return
 
       message.channel.send(
-        roaster.map(({ name, clan }) => `${name} @ ${clan.name}`).join('\n')
+        `vs ${war.opponent}` +
+          war.roaster
+            .map(({ name, clan }) => `${name} @ ${clan.name}`)
+            .join('\n')
       )
     },
     description: '参加メンバー一覧: <War_ID>',
@@ -75,10 +79,11 @@ const commands: Commands = {
 
   idow: {
     async action(message, args) {
-      const roaster = await handleWar(message, args)
-      if (!roaster) return
+      const war = await handleWar(message, args)
 
-      const absentPlayers = presenceCheck(roaster)
+      if (!war || !war.roaster) return
+
+      const absentPlayers = presenceCheck(war.roaster)
 
       const absentCount = absentPlayers.length
 
@@ -118,7 +123,7 @@ dcClient.on('message', message => {
 
 export const login_bot = async () => {
   try {
-    await dcClient.login(config.parsed?.BOT_TOKEN)
+    await dcClient.login(parsed?.BOT_TOKEN)
   } catch (e) {
     console.error(e)
   }
