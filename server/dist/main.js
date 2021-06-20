@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -54,6 +43,7 @@ var express_1 = __importDefault(require("express"));
 var coc_api_1 = require("./utils/coc_api");
 var discord_bot_1 = require("./utils/discord_bot");
 var firebase_1 = require("./utils/firebase");
+var format_war_1 = require("./utils/format_war");
 var app = express_1.default();
 app.use(express_1.default.json());
 app.listen(5000);
@@ -77,21 +67,16 @@ app.get('/api/players', function (req, res) { return __awaiter(void 0, void 0, v
         }
     });
 }); });
-app.post('/api/roasters', function (req, res) {
-    var response = __assign(__assign({}, req.body), { date: firebase_1.toTimeStamp(new Date()) });
-    firebase_1.db.collection('wars').add({ response: response });
-    res.json(response);
+app.post('/api/war', function (req, res) {
+    try {
+        var response = req.body;
+        firebase_1.db.collection('wars').add({ response: response });
+        res.json(response);
+    }
+    catch (error) {
+        res.status(400).json({ error: error });
+    }
 });
-(function () { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, discord_bot_1.login_bot()];
-            case 1:
-                _a.sent();
-                return [2 /*return*/];
-        }
-    });
-}); })();
 app.get('/api/wars', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var wars;
     return __generator(this, function (_a) {
@@ -102,8 +87,35 @@ app.get('/api/wars', function (req, res) { return __awaiter(void 0, void 0, void
                     .get()];
             case 1:
                 wars = _a.sent();
-                res.json(wars.docs.map(function (d) { return (__assign(__assign({}, d.data()), { spin_time: d.data().spin_time.toDate(), id: d.id })); }));
+                res.json(wars.docs.map(function (d) { return format_war_1.formatWar(d.data(), d.id); }));
                 return [2 /*return*/];
         }
     });
 }); });
+app.get('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var war, data;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, firebase_1.db.collection('wars').doc(req.params.id).get()];
+            case 1:
+                war = _a.sent();
+                data = war.data();
+                if (!data) {
+                    res.json(404).json({ error: 'War not found' });
+                    return [2 /*return*/];
+                }
+                res.json(format_war_1.formatWar(data, war.id));
+                return [2 /*return*/];
+        }
+    });
+}); });
+(function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, discord_bot_1.login_bot()];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); })();
