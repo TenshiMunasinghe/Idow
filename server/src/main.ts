@@ -7,7 +7,7 @@ import { War } from './utils/get_players_details'
 
 const app = express()
 
-interface ReqWar extends Omit<War, 'spin_time' | 'roaster'> {
+export interface ReqWar extends Omit<War, 'spin_time' | 'roaster'> {
   spin_time: string
   roaster: string[]
 }
