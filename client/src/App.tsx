@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Home from './pages/home'
-import Roaster from './pages/roaster'
+import War from './pages/war'
 
 const client = new QueryClient()
 
@@ -16,7 +16,7 @@ const App = () => {
             <Home />
           </Route>
           <Route exact path='/roaster/:id'>
-            <Roaster />
+            <War />
           </Route>
         </Switch>
       </Router>
