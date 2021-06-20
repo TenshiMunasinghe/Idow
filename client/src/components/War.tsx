@@ -1,13 +1,12 @@
 import { Link } from 'react-router-dom'
 import { ClientWar } from '../hooks/useGetWars'
+import { dateToString } from '../utils/dateToString'
 
 interface Props {
   war: ClientWar
 }
 
 const War = ({ war }: Props) => {
-  const date = new Date(war.spin_time)
-
   return (
     <Link
       key={war.id}
@@ -17,11 +16,7 @@ const War = ({ war }: Props) => {
         <span className='mr-2'>vs</span>
         <h3 className='text-2xl'>{war.opponent}</h3>
       </div>
-      <div>
-        {date.getMonth()}月{date.getDay()}日{' '}
-        {String(date.getHours()).padStart(2, '0')}:
-        {String(date.getMinutes()).padStart(2, '0')}
-      </div>
+      <div>{dateToString(new Date(war.spin_time))}</div>
       <div>準備 {war.prep_time}</div>
       <div>対戦 {war.war_time}</div>
     </Link>
