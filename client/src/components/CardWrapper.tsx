@@ -1,18 +1,16 @@
+import { FC } from 'react'
 import { Link } from 'react-router-dom'
-import { ClientWar } from '../hooks/useGetWars'
-import WarInfo from './WarInfo'
 
 interface Props {
-  war: ClientWar
+  to: string
 }
 
-const War = ({ war }: Props) => {
+const War: FC<Props> = ({ children, to }) => {
   return (
     <Link
-      key={war.id}
-      to={`/roaster/${war.id}`}
+      to={to}
       className='p-2 space-y-2 border-2 border-gray-700 bg-gray-800 rounded-sm'>
-      <WarInfo war={war} />
+      {children}
     </Link>
   )
 }
