@@ -42,6 +42,7 @@ app.get('/api/wars', async (req, res) => {
     wars.docs.map(d => ({
       ...d.data(),
       spin_time: d.data().spin_time.toDate(),
+      id: d.id,
     }))
   )
 })

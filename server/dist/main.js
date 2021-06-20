@@ -102,7 +102,7 @@ app.get('/api/wars', function (req, res) { return __awaiter(void 0, void 0, void
                     .get()];
             case 1:
                 wars = _a.sent();
-                res.json(wars.docs.map(function (d) { return (__assign(__assign({}, d.data()), { spin_time: d.data().spin_time.toDate() })); }));
+                res.json(wars.docs.map(function (d) { return (__assign(__assign({}, d.data()), { spin_time: d.data().spin_time.toDate(), id: d.id })); }));
                 return [2 /*return*/];
         }
     });
