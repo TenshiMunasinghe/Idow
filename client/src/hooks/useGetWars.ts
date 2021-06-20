@@ -7,9 +7,8 @@ export interface ClientWar extends Omit<War, 'spin_time'> {
   id: string
 }
 
-const getWars: () => Promise<ClientWar[]> = async () => {
-  return await ky.get('/api/wars').json()
-}
+const getWars: () => Promise<ClientWar[]> = async () =>
+  await ky.get('/api/wars').json()
 
 export const useGetWars = () => {
   return useQuery('wars', getWars)
