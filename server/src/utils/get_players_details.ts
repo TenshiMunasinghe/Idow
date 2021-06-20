@@ -6,6 +6,8 @@ export type Player = { [key: string]: any }
 export interface War {
   opponent: string
   spin_time: TimeStamp
+  prep_time: string
+  war_time: string
   roaster: Player[]
 }
 
