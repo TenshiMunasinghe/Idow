@@ -7,7 +7,11 @@ interface Props extends InputHTMLAttributes<any> {
 
 const Input = ({ register, ...rest }: Props) => {
   return (
-    <input className='bg-gray-200 text-gray-900 p-1' {...register} {...rest} />
+    <input
+      className='bg-gray-200 text-gray-900 p-1 rounded-sm focus:outline-none focus:ring-2 focus:ring-violet-600'
+      {...register}
+      {...rest}
+    />
   )
 }
 
