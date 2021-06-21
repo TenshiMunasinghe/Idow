@@ -44,6 +44,7 @@ var coc_api_1 = require("./utils/coc_api");
 var discord_bot_1 = require("./utils/discord_bot");
 var firebase_1 = require("./utils/firebase");
 var format_war_1 = require("./utils/format_war");
+var get_players_details_1 = require("./utils/get_players_details");
 var app = express_1.default();
 app.use(express_1.default.json());
 app.listen(5000);
@@ -93,18 +94,22 @@ app.get('/api/wars', function (req, res) { return __awaiter(void 0, void 0, void
     });
 }); });
 app.get('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var war, data;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var war, data, formattedWar, _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0: return [4 /*yield*/, firebase_1.db.collection('wars').doc(req.params.id).get()];
             case 1:
-                war = _a.sent();
+                war = _c.sent();
                 data = war.data();
                 if (!data) {
                     res.json(404).json({ error: 'War not found' });
                     return [2 /*return*/];
                 }
-                res.json(format_war_1.formatWar(data, war.id));
+                formattedWar = format_war_1.formatWar(data, war.id);
+                _b = (_a = res).json;
+                return [4 /*yield*/, get_players_details_1.getPlayerDetails(formattedWar)];
+            case 2:
+                _b.apply(_a, [_c.sent()]);
                 return [2 /*return*/];
         }
     });

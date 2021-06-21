@@ -3,11 +3,11 @@ import { cocClient } from './utils/coc_api'
 import { login_bot } from './utils/discord_bot'
 import { db, toTimeStamp } from './utils/firebase'
 import { formatWar } from './utils/format_war'
-import { War } from './utils/get_players_details'
+import { DetailedWar, getPlayerDetails } from './utils/get_players_details'
 
 const app = express()
 
-export interface ReqWar extends Omit<War, 'spin_time' | 'roaster'> {
+export interface WarType extends Omit<DetailedWar, 'spin_time' | 'roaster'> {
   spin_time: string
   roaster: string[]
 }
@@ -32,7 +32,7 @@ app.get('/api/players', async (req, res) => {
 
 app.post('/api/war', (req, res) => {
   try {
-    const response = req.body as ReqWar
+    const response = req.body as WarType
     db.collection('wars').add({ response })
     res.json(response)
   } catch (error) {
@@ -56,7 +56,8 @@ app.get('/api/war/:id', async (req, res) => {
     res.json(404).json({ error: 'War not found' })
     return
   }
-  res.json(formatWar(data, war.id))
+  const formattedWar = formatWar(data, war.id)
+  res.json(await getPlayerDetails(formattedWar))
 })
 ;(async () => {
   await login_bot()
