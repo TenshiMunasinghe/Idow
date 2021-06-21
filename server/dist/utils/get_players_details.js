@@ -58,10 +58,21 @@ var getPlayerDetails = function (war) { return __awaiter(void 0, void 0, void 0,
                 if (!war)
                     return [2 /*return*/];
                 roaster = war.roaster.map(function (m) { return __awaiter(void 0, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
+                    var _a, clan, townHallLevel, tag, name;
+                    return __generator(this, function (_b) {
+                        switch (_b.label) {
                             case 0: return [4 /*yield*/, coc_api_1.cocClient.playerByTag(m)];
-                            case 1: return [2 /*return*/, (_a.sent())];
+                            case 1:
+                                _a = _b.sent(), clan = _a.clan, townHallLevel = _a.townHallLevel, tag = _a.tag, name = _a.name;
+                                return [2 /*return*/, {
+                                        clan: {
+                                            name: clan.name,
+                                            tag: clan.tag,
+                                        },
+                                        townHallLevel: townHallLevel,
+                                        tag: tag,
+                                        name: name,
+                                    }];
                         }
                     });
                 }); });

@@ -1,9 +1,17 @@
 import { cocClient } from './coc_api'
 import { TimeStamp } from './firebase'
 
-export type Player = { [key: string]: any }
+export interface Player {
+  clan: {
+    name: string
+    tag: string
+  }
+  townHallLevel: number
+  tag: string
+  name: string
+}
 
-export interface War {
+export interface DetailedWar {
   opponent: string
   spin_time: TimeStamp
   roaster: Player[]
@@ -15,8 +23,17 @@ export const getPlayerDetails = async (
   if (!war) return
 
   const roaster: Promise<Player>[] = war.roaster.map(async (m: string) => {
-    return (await cocClient.playerByTag(m)) as Player
+    const { clan, townHallLevel, tag, name } = await cocClient.playerByTag(m)
+    return {
+      clan: {
+        name: clan.name,
+        tag: clan.tag,
+      },
+      townHallLevel,
+      tag,
+      name,
+    } as Player
   })
 
-  return { ...war, roaster: await Promise.all(roaster) } as War
+  return { ...war, roaster: await Promise.all(roaster) } as DetailedWar
 }
