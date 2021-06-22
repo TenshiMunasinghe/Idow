@@ -1,7 +1,7 @@
 import * as Discord from 'discord.js'
 import { parsed } from './config'
 import { db, toTimeStamp } from './firebase'
-import { getPlayerDetails } from './get_players_details'
+import { DetailedWar, getPlayerDetails } from './get_players_details'
 import { presenceCheck } from './presence_check'
 
 const dcClient = new Discord.Client()
@@ -29,7 +29,10 @@ const handleWar = async (message: Discord.Message, args?: string[]) => {
     return
   }
 
-  return await getPlayerDetails(data)
+  return {
+    ...data,
+    roaster: await getPlayerDetails(data.roaster),
+  } as DetailedWar
 }
 
 const commands: Commands = {

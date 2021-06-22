@@ -1,4 +1,34 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,14 +65,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.login_bot = void 0;
 var Discord = __importStar(require("discord.js"));
 var config_1 = require("./config");
 var firebase_1 = require("./firebase");
@@ -51,9 +75,10 @@ var presence_check_1 = require("./presence_check");
 var dcClient = new Discord.Client();
 var PREFIX = '!';
 var handleWar = function (message, args) { return __awaiter(void 0, void 0, void 0, function () {
-    var war, data;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var war, data, _a;
+    var _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
                 if (!args || args.length === 0) {
                     message.channel.send('War_IDを入力してください\n例: !roaster <War_ID>');
@@ -61,14 +86,16 @@ var handleWar = function (message, args) { return __awaiter(void 0, void 0, void
                 }
                 return [4 /*yield*/, firebase_1.db.collection('wars').doc(args[0]).get()];
             case 1:
-                war = _a.sent();
+                war = _c.sent();
                 data = war.data();
                 if (!war.exists || !data) {
                     message.channel.send('(そんなWar_IDは)ないです。');
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, get_players_details_1.getPlayerDetails(data)];
-            case 2: return [2 /*return*/, _a.sent()];
+                _a = [__assign({}, data)];
+                _b = {};
+                return [4 /*yield*/, get_players_details_1.getPlayerDetails(data.roaster)];
+            case 2: return [2 /*return*/, __assign.apply(void 0, _a.concat([(_b.roaster = _c.sent(), _b)]))];
         }
     });
 }); };
@@ -177,22 +204,22 @@ dcClient.on('message', function (message) {
     }
     commands[command].action(message, args);
 });
-exports.login_bot = function () { return __awaiter(void 0, void 0, void 0, function () {
+var login_bot = function () { return __awaiter(void 0, void 0, void 0, function () {
     var e_1;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                _b.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, dcClient.login((_a = config_1.parsed) === null || _a === void 0 ? void 0 : _a.BOT_TOKEN)];
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, dcClient.login(config_1.parsed === null || config_1.parsed === void 0 ? void 0 : config_1.parsed.BOT_TOKEN)];
             case 1:
-                _b.sent();
+                _a.sent();
                 return [3 /*break*/, 3];
             case 2:
-                e_1 = _b.sent();
+                e_1 = _a.sent();
                 console.error(e_1);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); };
+exports.login_bot = login_bot;
