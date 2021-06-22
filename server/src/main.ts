@@ -1,5 +1,4 @@
 import express from 'express'
-import { cocClient } from './utils/coc_api'
 import { login_bot } from './utils/discord_bot'
 import { db, toTimeStamp } from './utils/firebase'
 import { formatWar } from './utils/format_war'
@@ -19,14 +18,8 @@ app.listen(5000)
 app.get('/api/players', async (req, res) => {
   const snapshot = await db.collection('players').get()
   const tags = snapshot.docs.map(s => s.data().player_tag)
-  console.log(tags)
 
-  const players: any = await Promise.all(
-    tags.map(t => {
-      const { name, townHallLevel, clan } = cocClient.playerByTag(t)
-      return { name, townHallLevel, clan }
-    })
-  )
+  const players = await getPlayerDetails(tags)
   res.json(players)
 })
 
@@ -57,7 +50,8 @@ app.get('/api/war/:id', async (req, res) => {
     return
   }
   const formattedWar = formatWar(data, war.id)
-  res.json(await getPlayerDetails(formattedWar))
+  const roaster = await getPlayerDetails(data.roaster)
+  res.json({ ...formattedWar, roaster })
 })
 ;(async () => {
   await login_bot()
