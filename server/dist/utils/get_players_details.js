@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -47,17 +36,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPlayerDetails = void 0;
 var coc_api_1 = require("./coc_api");
-var getPlayerDetails = function (war) { return __awaiter(void 0, void 0, void 0, function () {
-    var roaster, _a;
-    var _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+exports.getPlayerDetails = function (roaster) { return __awaiter(void 0, void 0, void 0, function () {
+    var players;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                if (!war)
-                    return [2 /*return*/];
-                roaster = war.roaster.map(function (m) { return __awaiter(void 0, void 0, void 0, function () {
+                players = roaster.map(function (m) { return __awaiter(void 0, void 0, void 0, function () {
                     var _a, clan, townHallLevel, tag, name;
                     return __generator(this, function (_b) {
                         switch (_b.label) {
@@ -76,11 +61,8 @@ var getPlayerDetails = function (war) { return __awaiter(void 0, void 0, void 0,
                         }
                     });
                 }); });
-                _a = [__assign({}, war)];
-                _b = {};
-                return [4 /*yield*/, Promise.all(roaster)];
-            case 1: return [2 /*return*/, __assign.apply(void 0, _a.concat([(_b.roaster = _c.sent(), _b)]))];
+                return [4 /*yield*/, Promise.all(players)];
+            case 1: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
-exports.getPlayerDetails = getPlayerDetails;

@@ -17,12 +17,8 @@ export interface DetailedWar {
   roaster: Player[]
 }
 
-export const getPlayerDetails = async (
-  war?: FirebaseFirestore.DocumentData
-) => {
-  if (!war) return
-
-  const roaster: Promise<Player>[] = war.roaster.map(async (m: string) => {
+export const getPlayerDetails = async (roaster: string[]) => {
+  const players: Promise<Player>[] = roaster.map(async (m: string) => {
     const { clan, townHallLevel, tag, name } = await cocClient.playerByTag(m)
     return {
       clan: {
@@ -35,5 +31,5 @@ export const getPlayerDetails = async (
     } as Player
   })
 
-  return { ...war, roaster: await Promise.all(roaster) } as DetailedWar
+  return await Promise.all(players)
 }
