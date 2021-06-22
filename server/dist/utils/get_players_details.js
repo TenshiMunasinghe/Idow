@@ -36,8 +36,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getPlayerDetails = void 0;
 var coc_api_1 = require("./coc_api");
-exports.getPlayerDetails = function (roaster) { return __awaiter(void 0, void 0, void 0, function () {
+var getPlayerDetails = function (roaster) { return __awaiter(void 0, void 0, void 0, function () {
     var players;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -66,3 +67,4 @@ exports.getPlayerDetails = function (roaster) { return __awaiter(void 0, void 0,
         }
     });
 }); };
+exports.getPlayerDetails = getPlayerDetails;
