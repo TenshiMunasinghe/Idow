@@ -1,10 +1,13 @@
-import * as firebase from 'firebase-admin'
+import { WarType } from '../main'
 
-export const formatWar = (
-  war: firebase.firestore.DocumentData,
+export interface FormattedWar extends Omit<WarType, 'spin_time'> {
+  spin_time: string
   id: string
-) => ({
-  ...war,
-  spin_time: war.spin_time.toDate(),
-  id,
-})
+}
+
+export const formatWar = (war: WarType, id: string) =>
+  ({
+    ...war,
+    spin_time: war.spin_time.toDate().toString(),
+    id,
+  } as FormattedWar)
