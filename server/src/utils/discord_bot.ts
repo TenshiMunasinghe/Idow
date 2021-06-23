@@ -74,6 +74,15 @@ const commands: Commands = {
 
       if (!war || !war.roaster) return
 
+      //  generates text like:
+
+      // "TH14
+      // [player_name] @ [clan_name]
+      // ...
+
+      // TH13
+      // [player_name] @ [clan_name]
+      // ..."
       const roaster = Object.keys(war.roaster)
         .sort((a, b) => parseInt(b) - parseInt(a))
         .map(
