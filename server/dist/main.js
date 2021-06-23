@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -54,7 +43,7 @@ var express_1 = __importDefault(require("express"));
 var discord_bot_1 = require("./utils/discord_bot");
 var firebase_1 = require("./utils/firebase");
 var format_war_1 = require("./utils/format_war");
-var get_players_details_1 = require("./utils/get_players_details");
+var get_detailed_war_1 = require("./utils/get_detailed_war");
 var app = express_1.default();
 app.use(express_1.default.json());
 app.listen(5000);
@@ -66,7 +55,7 @@ app.get('/api/players', function (req, res) { return __awaiter(void 0, void 0, v
             case 1:
                 snapshot = _a.sent();
                 tags = snapshot.docs.map(function (s) { return s.data().player_tag; });
-                return [4 /*yield*/, get_players_details_1.getPlayerDetails(tags)];
+                return [4 /*yield*/, get_detailed_war_1.getDetailedRoaster(tags)];
             case 2:
                 players = _a.sent();
                 res.json(players);
@@ -85,38 +74,49 @@ app.post('/api/war', function (req, res) {
     }
 });
 app.get('/api/wars', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var wars;
+    var wars, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, firebase_1.db
-                    .collection('wars')
-                    .where('spin_time', '>', firebase_1.toTimeStamp(new Date()))
-                    .get()];
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, firebase_1.db
+                        .collection('wars')
+                        .where('spin_time', '>', firebase_1.toTimeStamp(new Date()))
+                        .get()];
             case 1:
                 wars = _a.sent();
                 res.json(wars.docs.map(function (d) { return format_war_1.formatWar(d.data(), d.id); }));
-                return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                res.status(500).json({ error: 'Internal server error' });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); });
 app.get('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var war, data, formattedWar, roaster;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, firebase_1.db.collection('wars').doc(req.params.id).get()];
+    var war, data, formattedWar, _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, firebase_1.db.collection('wars').doc(req.params.id).get()];
             case 1:
-                war = _a.sent();
+                war = _b.sent();
                 data = war.data();
                 if (!data) {
                     res.json(404).json({ error: 'War not found' });
                     return [2 /*return*/];
                 }
                 formattedWar = format_war_1.formatWar(data, war.id);
-                return [4 /*yield*/, get_players_details_1.getPlayerDetails(data.roaster)];
+                res.json(formattedWar);
+                return [3 /*break*/, 3];
             case 2:
-                roaster = _a.sent();
-                res.json(__assign(__assign({}, formattedWar), { roaster: roaster }));
-                return [2 /*return*/];
+                _a = _b.sent();
+                res.status(500).json({ error: 'Internal server error' });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); });

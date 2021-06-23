@@ -1,13 +1,14 @@
 import express from 'express'
 import { login_bot } from './utils/discord_bot'
-import { db, toTimeStamp } from './utils/firebase'
+import { db, TimeStamp, toTimeStamp } from './utils/firebase'
 import { formatWar } from './utils/format_war'
-import { DetailedWar, getPlayerDetails } from './utils/get_players_details'
+import { getDetailedRoaster } from './utils/get_detailed_war'
 
 const app = express()
 
-export interface WarType extends Omit<DetailedWar, 'spin_time' | 'roaster'> {
-  spin_time: string
+export interface WarType {
+  opponent: string
+  spin_time: TimeStamp
   roaster: string[]
 }
 
@@ -19,7 +20,7 @@ app.get('/api/players', async (req, res) => {
   const snapshot = await db.collection('players').get()
   const tags = snapshot.docs.map(s => s.data().player_tag)
 
-  const players = await getPlayerDetails(tags)
+  const players = await getDetailedRoaster(tags)
   res.json(players)
 })
 
@@ -34,24 +35,31 @@ app.post('/api/war', (req, res) => {
 })
 
 app.get('/api/wars', async (req, res) => {
-  const wars = await db
-    .collection('wars')
-    .where('spin_time', '>', toTimeStamp(new Date()))
-    .get()
+  try {
+    const wars = await db
+      .collection('wars')
+      .where('spin_time', '>', toTimeStamp(new Date()))
+      .get()
 
-  res.json(wars.docs.map(d => formatWar(d.data(), d.id)))
+    res.json(wars.docs.map(d => formatWar(d.data() as WarType, d.id)))
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' })
+  }
 })
 
 app.get('/api/war/:id', async (req, res) => {
-  const war = await db.collection('wars').doc(req.params.id).get()
-  const data = war.data()
-  if (!data) {
-    res.json(404).json({ error: 'War not found' })
-    return
+  try {
+    const war = await db.collection('wars').doc(req.params.id).get()
+    const data = war.data()
+    if (!data) {
+      res.json(404).json({ error: 'War not found' })
+      return
+    }
+    const formattedWar = formatWar(data as WarType, war.id)
+    res.json(formattedWar)
+  } catch {
+    res.status(500).json({ error: 'Internal server error' })
   }
-  const formattedWar = formatWar(data, war.id)
-  const roaster = await getPlayerDetails(data.roaster)
-  res.json({ ...formattedWar, roaster })
 })
 ;(async () => {
   await login_bot()
