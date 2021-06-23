@@ -1,10 +1,13 @@
+import _axios from 'axios'
 import * as Discord from 'discord.js'
 import { parsed } from './config'
-import { db, toTimeStamp } from './firebase'
-import { DetailedWar, getPlayerDetails } from './get_players_details'
+import { FormattedWar } from './format_war'
+import { DetailedWar, getDetailedRoaster } from './get_detailed_war'
 import { presenceCheck } from './presence_check'
 
 const dcClient = new Discord.Client()
+
+const axios = _axios.create({ baseURL: 'http://localhost:5000' })
 
 const PREFIX = '!'
 
@@ -20,18 +23,18 @@ const handleWar = async (message: Discord.Message, args?: string[]) => {
     message.channel.send('War_IDを入力してください\n例: !roaster <War_ID>')
     return
   }
-  const war = await db.collection('wars').doc(args[0]).get()
+  const war = await axios.get<FormattedWar>(`/api/war/${args[0]}`)
 
-  const data = war.data()
+  const { data } = war
 
-  if (!war.exists || !data) {
+  if (!war || !data) {
     message.channel.send('(そんなWar_IDは)ないです。')
     return
   }
 
   return {
     ...data,
-    roaster: await getPlayerDetails(data.roaster),
+    roaster: await getDetailedRoaster(data.roaster),
   } as DetailedWar
 }
 
@@ -50,16 +53,17 @@ const commands: Commands = {
 
   wars: {
     async action(message) {
-      const wars = await db
-        .collection('wars')
-        .where('spin_time', '>', toTimeStamp(new Date()))
-        .get()
+      try {
+        const wars = await axios.get<FormattedWar[]>('/api/wars')
 
-      const text = wars.docs
-        .map(w => `vs ${w.data().opponent}\nWar_ID - ${w.id}`)
-        .join('\n\n')
+        const text = wars.data
+          .map((w: any) => `vs ${w.opponent}\nWar_ID - ${w.id}`)
+          .join('\n\n')
 
-      message.channel.send(text)
+        message.channel.send(text)
+      } catch (e) {
+        console.error(e)
+      }
     },
     description: '対戦一覧: <War_ID>',
   },
@@ -70,12 +74,18 @@ const commands: Commands = {
 
       if (!war || !war.roaster) return
 
-      message.channel.send(
-        `vs ${war.opponent}` +
-          war.roaster
-            .map(({ name, clan }) => `**${name}** @ ${clan.name}`)
-            .join('\n')
-      )
+      const roaster = Object.keys(war.roaster)
+        .sort((a, b) => parseInt(b) - parseInt(a))
+        .map(
+          th =>
+            `**TH${th}**\n` +
+            war.roaster[th]
+              .map(({ name, clan }) => `${name} @ ${clan.name}`)
+              .join('\n')
+        )
+        .join('\n\n')
+
+      message.channel.send(`vs **${war.opponent}**\n\n` + roaster)
     },
     description: '参加メンバー一覧: <War_ID>',
   },
@@ -95,11 +105,12 @@ const commands: Commands = {
           ? '全員集合してます！'
           : absentPlayers
               .map(p => `**${p.name}** @ ${p.clan.name}`)
-              .join('\n') + `\n**${absentCount}人**いないです。`
+              .join('\n') + `\n\n**${absentCount}人**いないです。`
 
-      message.channel.send(text)
+      message.channel.send(`vs **${war.opponent}**\n\n` + text)
     },
     description: '移動確認',
+    //TODO: add player and filter possible errors eg: extra space, missing '#'
   },
 }
 const commandKeys = Object.keys(commands)

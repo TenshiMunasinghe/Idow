@@ -65,14 +65,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.login_bot = void 0;
+var axios_1 = __importDefault(require("axios"));
 var Discord = __importStar(require("discord.js"));
 var config_1 = require("./config");
-var firebase_1 = require("./firebase");
-var get_players_details_1 = require("./get_players_details");
+var get_detailed_war_1 = require("./get_detailed_war");
 var presence_check_1 = require("./presence_check");
 var dcClient = new Discord.Client();
+var axios = axios_1.default.create({ baseURL: 'http://localhost:5000' });
 var PREFIX = '!';
 var handleWar = function (message, args) { return __awaiter(void 0, void 0, void 0, function () {
     var war, data, _a;
@@ -84,17 +88,17 @@ var handleWar = function (message, args) { return __awaiter(void 0, void 0, void
                     message.channel.send('War_IDを入力してください\n例: !roaster <War_ID>');
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, firebase_1.db.collection('wars').doc(args[0]).get()];
+                return [4 /*yield*/, axios.get("/api/war/" + args[0])];
             case 1:
                 war = _c.sent();
-                data = war.data();
-                if (!war.exists || !data) {
+                data = war.data;
+                if (!war || !data) {
                     message.channel.send('(そんなWar_IDは)ないです。');
                     return [2 /*return*/];
                 }
                 _a = [__assign({}, data)];
                 _b = {};
-                return [4 /*yield*/, get_players_details_1.getPlayerDetails(data.roaster)];
+                return [4 /*yield*/, get_detailed_war_1.getDetailedRoaster(data.roaster)];
             case 2: return [2 /*return*/, __assign.apply(void 0, _a.concat([(_b.roaster = _c.sent(), _b)]))];
         }
     });
@@ -112,20 +116,24 @@ var commands = {
     wars: {
         action: function (message) {
             return __awaiter(this, void 0, void 0, function () {
-                var wars, text;
+                var wars, text, e_1;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, firebase_1.db
-                                .collection('wars')
-                                .where('spin_time', '>', firebase_1.toTimeStamp(new Date()))
-                                .get()];
+                        case 0:
+                            _a.trys.push([0, 2, , 3]);
+                            return [4 /*yield*/, axios.get('/api/wars')];
                         case 1:
                             wars = _a.sent();
-                            text = wars.docs
-                                .map(function (w) { return "vs " + w.data().opponent + "\nWar_ID - " + w.id; })
+                            text = wars.data
+                                .map(function (w) { return "vs " + w.opponent + "\nWar_ID - " + w.id; })
                                 .join('\n\n');
                             message.channel.send(text);
-                            return [2 /*return*/];
+                            return [3 /*break*/, 3];
+                        case 2:
+                            e_1 = _a.sent();
+                            console.error(e_1);
+                            return [3 /*break*/, 3];
+                        case 3: return [2 /*return*/];
                     }
                 });
             });
@@ -135,7 +143,7 @@ var commands = {
     roaster: {
         action: function (message, args) {
             return __awaiter(this, void 0, void 0, function () {
-                var war;
+                var war, roaster;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, handleWar(message, args)];
@@ -143,13 +151,19 @@ var commands = {
                             war = _a.sent();
                             if (!war || !war.roaster)
                                 return [2 /*return*/];
-                            message.channel.send("vs " + war.opponent +
-                                war.roaster
-                                    .map(function (_a) {
-                                    var name = _a.name, clan = _a.clan;
-                                    return "**" + name + "** @ " + clan.name;
-                                })
-                                    .join('\n'));
+                            roaster = Object.keys(war.roaster)
+                                .sort(function (a, b) { return parseInt(b) - parseInt(a); })
+                                .map(function (th) {
+                                return "**TH" + th + "**\n" +
+                                    war.roaster[th]
+                                        .map(function (_a) {
+                                        var name = _a.name, clan = _a.clan;
+                                        return name + " @ " + clan.name;
+                                    })
+                                        .join('\n');
+                            })
+                                .join('\n\n');
+                            message.channel.send("vs **" + war.opponent + "**\n\n" + roaster);
                             return [2 /*return*/];
                     }
                 });
@@ -174,14 +188,15 @@ var commands = {
                                 ? '全員集合してます！'
                                 : absentPlayers
                                     .map(function (p) { return "**" + p.name + "** @ " + p.clan.name; })
-                                    .join('\n') + ("\n**" + absentCount + "\u4EBA**\u3044\u306A\u3044\u3067\u3059\u3002");
-                            message.channel.send(text);
+                                    .join('\n') + ("\n\n**" + absentCount + "\u4EBA**\u3044\u306A\u3044\u3067\u3059\u3002");
+                            message.channel.send("vs **" + war.opponent + "**\n\n" + text);
                             return [2 /*return*/];
                     }
                 });
             });
         },
         description: '移動確認',
+        //TODO: add player and filter possible errors eg: extra space, missing '#'
     },
 };
 var commandKeys = Object.keys(commands);
@@ -205,7 +220,7 @@ dcClient.on('message', function (message) {
     commands[command].action(message, args);
 });
 var login_bot = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var e_1;
+    var e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -215,8 +230,8 @@ var login_bot = function () { return __awaiter(void 0, void 0, void 0, function 
                 _a.sent();
                 return [3 /*break*/, 3];
             case 2:
-                e_1 = _a.sent();
-                console.error(e_1);
+                e_2 = _a.sent();
+                console.error(e_2);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
