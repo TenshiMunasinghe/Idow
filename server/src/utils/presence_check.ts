@@ -1,6 +1,13 @@
+import { isArray } from 'lodash'
 import { parsed } from './config'
-import { Player } from './get_players_details'
+import { Player, Roaster } from './get_detailed_war'
 
-export const presenceCheck = (roaster: Player[]) => {
-  return roaster.filter(m => m.clan.tag !== parsed?.CLAN_TAG)
+export const presenceCheck = (roaster: Player[] | Roaster) => {
+  const roasterArr = isArray(roaster)
+    ? roaster
+    : Object.keys(roaster).reduce((r, k) => {
+        return r.concat(roaster[k])
+      }, [] as Player[])
+
+  return roasterArr.filter(m => m.clan.tag !== parsed?.CLAN_TAG)
 }
