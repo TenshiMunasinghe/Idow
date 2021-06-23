@@ -11,7 +11,6 @@ import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 import { WarType } from '../../../server/src/main'
 import FormGroup from '../components/FormGroup'
-import Input from '../components/Input'
 import Roaster from '../components/Roaster'
 import { useGetPlayers } from '../hooks/useGetPlayers'
 import { useGetWar } from '../hooks/useGetWar'
@@ -83,26 +82,22 @@ const War = () => {
             <PencilIcon className='w-5 h-5' />
           </div>
           <form onSubmit={handleSubmit(onSubmit)} className='space-y-5'>
-            <FormGroup>
-              <label>対戦相手</label>
-              {isEditMode ? (
-                <Input
-                  register={register('opponent')}
-                  defaultValue={war.data.opponent}
-                />
-              ) : (
-                <span className='font-semibold'>{war.data.opponent}</span>
-              )}
-            </FormGroup>
+            <FormGroup
+              label='対戦相手'
+              inputType='text'
+              isEditMode={isEditMode}
+              register={register('opponent')}
+              defaultInputValue={war.data.opponent}
+              value={war.data.opponent}
+            />
 
-            <FormGroup>
-              <label>マッチング時間</label>
-              {isEditMode ? (
-                <Input type='datetime-local' register={register('spin_time')} />
-              ) : (
-                <span>{dateToString(new Date(war.data.spin_time))}</span>
-              )}
-            </FormGroup>
+            <FormGroup
+              label='マッチング時間'
+              inputType='datetime-local'
+              isEditMode={isEditMode}
+              register={register('spin_time')}
+              value={dateToString(new Date(war.data.spin_time))}
+            />
 
             <Roaster townHalls={townHalls} roaster={players.data} />
 
