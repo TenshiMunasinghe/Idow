@@ -9,7 +9,7 @@ import {
 } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
-import { DetailedWar } from '../../../server/src/utils/get_detailed_war'
+import { WarType } from '../../../server/src/main'
 import FormGroup from '../components/FormGroup'
 import Input from '../components/Input'
 import Roaster from '../components/Roaster'
@@ -17,8 +17,8 @@ import { useGetPlayers } from '../hooks/useGetPlayers'
 import { useGetWar } from '../hooks/useGetWar'
 import { dateToString } from '../utils/dateToString'
 
-export interface FormData extends Omit<DetailedWar, 'spin_time' | 'roaster'> {
-  spin_time: Date
+export interface FormData extends Omit<WarType, 'spin_time'> {
+  spin_time: string
 }
 
 // like:
