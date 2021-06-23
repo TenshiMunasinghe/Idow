@@ -61,7 +61,7 @@ const Players = ({ townHall, players }: Props) => {
               } w-5 h-5 text-gray-300 ml-auto`}
             />
           </Disclosure.Button>
-          <Disclosure.Panel as='ul' className='my-2'>
+          <Disclosure.Panel as='ul' className='my-2 pl-3'>
             {players.map(player => (
               <li key={player.tag}>
                 {isEditMode ? (
