@@ -1,10 +1,10 @@
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
-import { ClientWar } from '../hooks/useGetWars'
+import { FormattedWar } from '../../../server/src/utils/format_war'
 import { dateToString } from '../utils/dateToString'
 
 interface Props {
-  war: ClientWar
+  war: FormattedWar
 }
 
 const War: FC<Props> = ({ war }) => {
