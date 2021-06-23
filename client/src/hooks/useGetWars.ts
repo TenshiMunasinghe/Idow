@@ -1,6 +1,6 @@
 import ky from 'ky'
 import { useQuery } from 'react-query'
-import { DetailedWar } from '../../../server/src/utils/get_players_details'
+import { DetailedWar } from '../../../server/src/utils/get_detailed_war'
 
 export interface ClientWar extends Omit<DetailedWar, 'spin_time'> {
   spin_time: string
