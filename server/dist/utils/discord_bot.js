@@ -85,7 +85,7 @@ var handleWar = function (message, args) { return __awaiter(void 0, void 0, void
         switch (_c.label) {
             case 0:
                 if (!args || args.length === 0) {
-                    message.channel.send('War_IDを入力してください\n例: !roaster <War_ID>');
+                    message.channel.send('War_IDを入力してください\n例: `!roaster <War_ID>`');
                     return [2 /*return*/];
                 }
                 return [4 /*yield*/, axios.get("/api/war/" + args[0])];
@@ -125,7 +125,7 @@ var commands = {
                         case 1:
                             wars = _a.sent();
                             text = wars.data
-                                .map(function (w) { return "vs " + w.opponent + "\nWar_ID - " + w.id; })
+                                .map(function (w) { return "vs `" + w.opponent + "`\nWar_ID - `" + w.id + "`"; })
                                 .join('\n\n');
                             message.channel.send(text);
                             return [3 /*break*/, 3];
@@ -138,7 +138,7 @@ var commands = {
                 });
             });
         },
-        description: '対戦一覧: <War_ID>',
+        description: '対戦一覧: `<War_ID>`',
     },
     roaster: {
         action: function (message, args) {
@@ -169,7 +169,7 @@ var commands = {
                 });
             });
         },
-        description: '参加メンバー一覧: <War_ID>',
+        description: '参加メンバー一覧: `<War_ID>`',
     },
     idow: {
         action: function (message, args) {
@@ -187,7 +187,7 @@ var commands = {
                             text = absentCount === 0
                                 ? '全員集合してます！'
                                 : absentPlayers
-                                    .map(function (p) { return "**" + p.name + "** @ " + p.clan.name; })
+                                    .map(function (p) { return "`" + p.name + "`@`" + p.clan.name + "`"; })
                                     .join('\n') + ("\n\n**" + absentCount + "\u4EBA**\u3044\u306A\u3044\u3067\u3059\u3002");
                             message.channel.send("vs **" + war.opponent + "**\n\n" + text);
                             return [2 /*return*/];

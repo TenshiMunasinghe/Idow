@@ -20,7 +20,7 @@ type Commands = {
 
 const handleWar = async (message: Discord.Message, args?: string[]) => {
   if (!args || args.length === 0) {
-    message.channel.send('War_IDを入力してください\n例: !roaster <War_ID>')
+    message.channel.send('War_IDを入力してください\n例: `!roaster <War_ID>`')
     return
   }
   const war = await axios.get<FormattedWar>(`/api/war/${args[0]}`)
@@ -57,7 +57,7 @@ const commands: Commands = {
         const wars = await axios.get<FormattedWar[]>('/api/wars')
 
         const text = wars.data
-          .map((w: any) => `vs ${w.opponent}\nWar_ID - ${w.id}`)
+          .map((w: any) => `vs \`${w.opponent}\`\nWar_ID - \`${w.id}\``)
           .join('\n\n')
 
         message.channel.send(text)
@@ -65,7 +65,7 @@ const commands: Commands = {
         console.error(e)
       }
     },
-    description: '対戦一覧: <War_ID>',
+    description: '対戦一覧: `<War_ID>`',
   },
 
   roaster: {
@@ -96,7 +96,7 @@ const commands: Commands = {
 
       message.channel.send(`vs **${war.opponent}**\n\n` + roaster)
     },
-    description: '参加メンバー一覧: <War_ID>',
+    description: '参加メンバー一覧: `<War_ID>`',
   },
 
   idow: {
@@ -113,7 +113,7 @@ const commands: Commands = {
         absentCount === 0
           ? '全員集合してます！'
           : absentPlayers
-              .map(p => `**${p.name}** @ ${p.clan.name}`)
+              .map(p => `\`${p.name}\`@\`${p.clan.name}\``)
               .join('\n') + `\n\n**${absentCount}人**いないです。`
 
       message.channel.send(`vs **${war.opponent}**\n\n` + text)
