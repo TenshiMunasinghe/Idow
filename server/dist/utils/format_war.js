@@ -12,5 +12,5 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.formatWar = function (war, id) {
-    return (__assign(__assign({}, war), { spin_time: war.spin_time.toDate().toString(), id: id }));
+    return (__assign(__assign({}, war), { spin_time: war.spin_time.toDate().toISOString(), id: id }));
 };

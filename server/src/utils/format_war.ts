@@ -8,6 +8,6 @@ export interface FormattedWar extends Omit<WarType, 'spin_time'> {
 export const formatWar = (war: WarType, id: string) =>
   ({
     ...war,
-    spin_time: war.spin_time.toDate().toString(),
+    spin_time: war.spin_time.toDate().toISOString(),
     id,
   } as FormattedWar)
