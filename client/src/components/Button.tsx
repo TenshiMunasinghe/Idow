@@ -23,7 +23,7 @@ const Button: FC<Props> = ({
       type,
       onClick,
       to: to,
-      className: `flex items-center justify-center text-center space-x-2 px-4 py-3 font-semibold rounded-md ${className}`,
+      className: `flex items-center justify-center text-center space-x-2 px-4 py-3 font-semibold rounded-md ${className} focus:outline-none focus:ring-2 focus:ring-gray-400`,
     },
     children
   )
