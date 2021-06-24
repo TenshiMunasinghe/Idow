@@ -13,6 +13,7 @@ import { useParams } from 'react-router-dom'
 import { WarType } from '../../../server/src/main'
 import { FormattedWar } from '../../../server/src/utils/format_war'
 import { RoasterType } from '../../../server/src/utils/get_detailed_war'
+import Button from '../components/Button'
 import FormGroup from '../components/FormGroup'
 import Roaster from '../components/Roaster'
 import RoasterText from '../components/RoasterText'
@@ -119,13 +120,7 @@ const War = () => {
 
             <Roaster townHalls={townHalls} roaster={players.data} />
 
-            {isEditMode && (
-              <button
-                type='submit'
-                className='w-full px-4 py-3 text-lg font-semibold bg-violet-800 rounded-md'>
-                決定
-              </button>
-            )}
+            {isEditMode && <Button type='submit'>決定</Button>}
           </form>
           <RoasterText
             roaster={Object.keys(players.data).reduce((obj, th) => {

@@ -2,6 +2,7 @@ import { Dialog } from '@headlessui/react'
 import Markdown from 'markdown-to-jsx'
 import { useState } from 'react'
 import { RoasterType } from '../../../server/src/utils/get_detailed_war'
+import Button from './Button'
 
 interface Props {
   roaster: RoasterType
@@ -23,14 +24,13 @@ const RoasterText = ({ roaster }: Props) => {
       <p className='bg-gray-800 px-3 py-5 rounded'>
         <Markdown>{text.replaceAll('\n', '<br/>')}</Markdown>
       </p>
-      <button
+      <Button
         onClick={() => {
           navigator.clipboard.writeText(text)
           setIsOpen(true)
-        }}
-        className='w-full bg-violet-700 rounded-md p-3'>
+        }}>
         コピー
-      </button>
+      </Button>
 
       <Dialog
         open={isOpen}
