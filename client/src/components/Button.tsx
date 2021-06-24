@@ -1,19 +1,31 @@
-import { FC } from 'react'
+import { ButtonHTMLAttributes, createElement, FC } from 'react'
+import { Link } from 'react-router-dom'
 
-interface Props {
-  onClick?: () => void
-  type?: 'button' | 'submit' | 'reset'
-  width?: string
+interface Props
+  extends ButtonHTMLAttributes<HTMLButtonElement | HTMLAnchorElement> {
+  as?: 'link' | 'button'
+  to?: string
 }
 
-const Button: FC<Props> = ({ onClick, type, width = 'full', children }) => {
-  return (
-    <button
-      type={type}
-      onClick={onClick}
-      className={`w-${width} px-4 py-3 text-lg font-semibold bg-violet-800 rounded-md`}>
-      {children}{' '}
-    </button>
+const Button: FC<Props> = ({
+  to = '/',
+  onClick,
+  type,
+  children,
+  className,
+  as = 'button',
+}) => {
+  const isLink = as === 'link'
+  const element = isLink ? Link : 'button'
+  return createElement(
+    element,
+    {
+      type,
+      onClick,
+      to: to,
+      className: `flex items-center justify-center text-center space-x-2 px-4 py-3 font-semibold rounded-md ${className}`,
+    },
+    children
   )
 }
 
