@@ -8,6 +8,7 @@ interface Props {
   isEditMode: boolean
   defaultInputValue?: string | number
   register: UseFormRegisterReturn
+  required: boolean
 }
 
 const FormGroup = ({
@@ -17,6 +18,7 @@ const FormGroup = ({
   defaultInputValue,
   register,
   inputType,
+  required,
 }: Props) => {
   return (
     <div className='flex space-x-2 items-end'>
@@ -26,6 +28,7 @@ const FormGroup = ({
           type={inputType}
           register={register}
           defaultValue={defaultInputValue}
+          required={required}
         />
       ) : (
         <span className='font-semibold text-2xl'>{value}</span>
