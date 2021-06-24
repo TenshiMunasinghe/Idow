@@ -44,6 +44,7 @@ var discord_bot_1 = require("./utils/discord_bot");
 var firebase_1 = require("./utils/firebase");
 var format_war_1 = require("./utils/format_war");
 var get_detailed_war_1 = require("./utils/get_detailed_war");
+var to_firebase_war_1 = require("./utils/to_firebase_war");
 var app = express_1.default();
 app.use(express_1.default.json());
 app.listen(5000);
@@ -63,16 +64,6 @@ app.get('/api/players', function (req, res) { return __awaiter(void 0, void 0, v
         }
     });
 }); });
-app.post('/api/war', function (req, res) {
-    try {
-        var response = req.body;
-        firebase_1.db.collection('wars').add({ response: response });
-        res.json(response);
-    }
-    catch (error) {
-        res.status(400).json({ error: error });
-    }
-});
 app.get('/api/wars', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var wars, error_1;
     return __generator(this, function (_a) {
@@ -100,9 +91,15 @@ app.get('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, v
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _b.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, firebase_1.db.collection('wars').doc(req.params.id).get()];
+                if (req.params.id === 'new') {
+                    res.json({ opponent: '', spin_time: new Date().toString(), roaster: [] });
+                    return [2 /*return*/];
+                }
+                _b.label = 1;
             case 1:
+                _b.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, firebase_1.db.collection('wars').doc(req.params.id).get()];
+            case 2:
                 war = _b.sent();
                 data = war.data();
                 if (!data) {
@@ -111,15 +108,35 @@ app.get('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, v
                 }
                 formattedWar = format_war_1.formatWar(data, war.id);
                 res.json(formattedWar);
-                return [3 /*break*/, 3];
-            case 2:
+                return [3 /*break*/, 4];
+            case 3:
                 _a = _b.sent();
                 res.status(500).json({ error: 'Internal server error' });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });
+app.post('/api/war', function (req, res) {
+    try {
+        var war = req.body;
+        firebase_1.db.collection('wars').add(to_firebase_war_1.toFirebaseWar(war));
+        res.json(war);
+    }
+    catch (error) {
+        res.status(400).json({ error: error });
+    }
+});
+app.post('/api/war/:id', function (req, res) {
+    try {
+        var war = req.body;
+        firebase_1.db.collection('wars').doc(req.params.id).update(to_firebase_war_1.toFirebaseWar(war));
+        res.json(war);
+    }
+    catch (error) {
+        res.status(400).json({ error: error });
+    }
+});
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
