@@ -1,4 +1,5 @@
 import { PencilIcon } from '@heroicons/react/solid'
+import ky from 'ky'
 import {
   createContext,
   Dispatch,
@@ -42,12 +43,6 @@ export const context = createContext<Context>({
   setRoasterTags: () => {},
 })
 
-const newWar: Omit<FormattedWar, 'id'> = {
-  opponent: '',
-  spin_time: '',
-  roaster: [],
-}
-
 const War = () => {
   const { id } = useParams<{ id: string }>()
   const war = useGetWar(id)
@@ -57,15 +52,22 @@ const War = () => {
   const [isEditMode, setIsEditMode] = useState(false)
   const [roasterTags, setRoasterTags] = useState<RoasterTags>(war.data?.roaster)
 
-  const warData = id === 'new' ? newWar : war.data
-
   useEffect(() => {
-    setRoasterTags(warData?.roaster)
-  }, [warData?.roaster])
+    setRoasterTags(war.data?.roaster)
+  }, [war.data?.roaster])
 
   const isLoading = war.isLoading || players.isLoading
 
-  const onSubmit = (values: FormData) => console.log(values)
+  const onSubmit = (values: FormData) => {
+    const spin_time = values.spin_time || war.data?.spin_time
+    if (!roasterTags || !spin_time) return
+    const data: Omit<FormattedWar, 'id'> = {
+      ...values,
+      roaster: roasterTags,
+      spin_time,
+    }
+    ky.post(`/api/war/${war.data?.id || ''}`, { json: data })
+  }
 
   const townHalls = useMemo(
     () =>
@@ -83,7 +85,7 @@ const War = () => {
     <div className='p-5'>
       {isLoading && <div>Loading...</div>}
       {!isLoading && war.isError && id !== 'new' && <div>無効なID</div>}
-      {!isLoading && warData && players.data && (
+      {!isLoading && war.data && players.data && (
         <context.Provider value={{ isEditMode, roasterTags, setRoasterTags }}>
           <div
             onClick={toggleEditMode}
@@ -98,8 +100,9 @@ const War = () => {
               inputType='text'
               isEditMode={isEditMode}
               register={register('opponent')}
-              defaultInputValue={warData.opponent}
-              value={warData.opponent}
+              defaultInputValue={war.data.opponent}
+              value={war.data.opponent}
+              required={true}
             />
 
             <FormGroup
@@ -107,7 +110,8 @@ const War = () => {
               inputType='datetime-local'
               isEditMode={isEditMode}
               register={register('spin_time')}
-              value={dateToString(new Date(warData.spin_time))}
+              value={dateToString(new Date(war.data.spin_time))}
+              required={false}
             />
 
             <Roaster townHalls={townHalls} roaster={players.data} />
