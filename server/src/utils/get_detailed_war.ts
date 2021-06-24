@@ -12,12 +12,12 @@ export interface Player {
   name: string
 }
 
-export interface Roaster {
+export interface RoasterType {
   [key: string]: Player[]
 }
 
 export interface DetailedWar extends Omit<FormattedWar, 'roaster'> {
-  roaster: Roaster
+  roaster: RoasterType
 }
 
 export const getDetailedRoaster = async (roaster: string[]) => {
@@ -36,5 +36,5 @@ export const getDetailedRoaster = async (roaster: string[]) => {
 
   const players = await Promise.all(playersPromise)
 
-  return groupBy(players, 'townHallLevel') as Roaster
+  return groupBy(players, 'townHallLevel') as RoasterType
 }

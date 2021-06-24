@@ -1,8 +1,8 @@
 import ky from 'ky'
 import { useQuery } from 'react-query'
-import { Roaster } from '../../../server/src/utils/get_detailed_war'
+import { RoasterType } from '../../../server/src/utils/get_detailed_war'
 
-const getPlayers: () => Promise<Roaster> = async () =>
+const getPlayers: () => Promise<RoasterType> = async () =>
   await ky.get('/api/players').json()
 
 export const useGetPlayers = () => useQuery('players', getPlayers)

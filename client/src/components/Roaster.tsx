@@ -1,11 +1,11 @@
 import { memo, useContext } from 'react'
-import { Player } from '../../../server/src/utils/get_detailed_war'
+import { RoasterType } from '../../../server/src/utils/get_detailed_war'
 import { context } from '../pages/war'
 import Players from './Players'
 
 interface Props {
   townHalls: number[]
-  roaster: { [key: string]: Player[] }
+  roaster: RoasterType
 }
 
 const Roaster = ({ townHalls, roaster }: Props) => {
