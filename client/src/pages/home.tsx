@@ -10,7 +10,7 @@ const Home = () => {
       <h2 className='text-3xl mb-4'>対戦一覧</h2>
       <Link
         to='/war/new'
-        className='flex space-x-2 bg-gray-700 rounded-md w-min ml-auto p-2'>
+        className='flex items-center space-x-2 bg-gray-700 rounded-md w-min ml-auto p-2'>
         <span className='whitespace-nowrap'>新規対戦</span>
         <DocumentIcon className='w-6 h-6' />
       </Link>
