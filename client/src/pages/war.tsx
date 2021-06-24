@@ -10,6 +10,7 @@ import {
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 import { WarType } from '../../../server/src/main'
+import { FormattedWar } from '../../../server/src/utils/format_war'
 import { RoasterType } from '../../../server/src/utils/get_detailed_war'
 import FormGroup from '../components/FormGroup'
 import Roaster from '../components/Roaster'
@@ -41,6 +42,12 @@ export const context = createContext<Context>({
   setRoasterTags: () => {},
 })
 
+const newWar: Omit<FormattedWar, 'id'> = {
+  opponent: '',
+  spin_time: '',
+  roaster: [],
+}
+
 const War = () => {
   const { id } = useParams<{ id: string }>()
   const war = useGetWar(id)
@@ -50,9 +57,11 @@ const War = () => {
   const [isEditMode, setIsEditMode] = useState(false)
   const [roasterTags, setRoasterTags] = useState<RoasterTags>(war.data?.roaster)
 
+  const warData = id === 'new' ? newWar : war.data
+
   useEffect(() => {
-    setRoasterTags(war.data?.roaster)
-  }, [war.data?.roaster])
+    setRoasterTags(warData?.roaster)
+  }, [warData?.roaster])
 
   const isLoading = war.isLoading || players.isLoading
 
@@ -73,8 +82,8 @@ const War = () => {
   return (
     <div className='p-5'>
       {isLoading && <div>Loading...</div>}
-      {!isLoading && !war.data && <div>無効なID</div>}
-      {!isLoading && war.data && players.data && (
+      {!isLoading && war.isError && id !== 'new' && <div>無効なID</div>}
+      {!isLoading && warData && players.data && (
         <context.Provider value={{ isEditMode, roasterTags, setRoasterTags }}>
           <div
             onClick={toggleEditMode}
@@ -89,8 +98,8 @@ const War = () => {
               inputType='text'
               isEditMode={isEditMode}
               register={register('opponent')}
-              defaultInputValue={war.data.opponent}
-              value={war.data.opponent}
+              defaultInputValue={warData.opponent}
+              value={warData.opponent}
             />
 
             <FormGroup
@@ -98,7 +107,7 @@ const War = () => {
               inputType='datetime-local'
               isEditMode={isEditMode}
               register={register('spin_time')}
-              value={dateToString(new Date(war.data.spin_time))}
+              value={dateToString(new Date(warData.spin_time))}
             />
 
             <Roaster townHalls={townHalls} roaster={players.data} />
