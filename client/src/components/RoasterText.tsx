@@ -43,7 +43,7 @@ const RoasterText = ({ roaster }: Props) => {
           <Dialog.Title>コピー完了！</Dialog.Title>
           <Button
             onClick={() => setIsOpen(false)}
-            className='bg-violet-300 w-min'>
+            className='bg-violet-300 w-full'>
             OK
           </Button>
         </div>
