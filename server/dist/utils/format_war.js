@@ -11,8 +11,6 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.formatWar = void 0;
-var formatWar = function (war, id) {
+exports.formatWar = function (war, id) {
     return (__assign(__assign({}, war), { spin_time: war.spin_time.toDate().toString(), id: id }));
 };
-exports.formatWar = formatWar;
