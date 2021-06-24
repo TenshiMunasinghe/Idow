@@ -20,7 +20,7 @@ const FormGroup = ({
 }: Props) => {
   return (
     <div className='flex space-x-2 items-end'>
-      <label>{label}</label>
+      <label className='whitespace-nowrap'>{label}</label>
       {isEditMode ? (
         <Input
           type={inputType}
