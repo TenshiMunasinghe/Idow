@@ -45,20 +45,18 @@ const Players = ({ townHall, players }: Props) => {
       {({ open }) => (
         <>
           <Disclosure.Button
-            className={`flex w-full items-center pr-3 rounded-md bg-gray-700 focus:outline-none focus:ring-1 focus:ring-violet-500 overflow-hidden`}>
+            className={`flex w-full items-center py-2 px-4 rounded-md bg-gray-700 focus:outline-none focus:ring-1 focus:ring-violet-500 overflow-hidden`}>
             <span
-              className={`font-semibold py-2 px-3 text-gray-800 bg-${
+              className={`text-lg font-semibold text-${
                 TH_COLORS[townHall] || 'gray'
               }-300`}>
               TH{townHall}
             </span>
-            <span className='px-3 py-2 bg-violet-300 text-gray-800'>
-              計 {selected.length}
-            </span>
+            <span className='text-lg ml-1 letter'>({selected.length})</span>
             <ChevronUpIcon
               className={`${
                 open ? 'transform rotate-180' : ''
-              } w-5 h-5 text-gray-300 ml-auto`}
+              } w-5 h-5 ml-auto text-gray-300`}
             />
           </Disclosure.Button>
           <Disclosure.Panel as='ul' className='my-2 pl-3'>
