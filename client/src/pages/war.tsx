@@ -88,16 +88,14 @@ const War = () => {
       {!isLoading && war.isError && id !== 'new' && <div>無効なID</div>}
       {!isLoading && war.data && players.data && (
         <context.Provider value={{ isEditMode, roasterTags, setRoasterTags }}>
-          <div
+          <Button
             onClick={toggleEditMode}
-            className={`flex space-x-2 items-center bg-${
+            className={`bg-${isEditMode ? 'violet' : 'gray'}-700 text-${
               isEditMode ? 'violet' : 'gray'
-            }-700 text-${
-              isEditMode ? 'violet' : 'gray'
-            }-200 w-min mb-5 rounded-md ml-auto p-2`}>
+            }-200 w-min mb-5 ml-auto`}>
             <span className='whitespace-nowrap'>編集</span>
             <PencilIcon className='w-5 h-5' />
-          </div>
+          </Button>
           <form onSubmit={handleSubmit(onSubmit)} className='space-y-5'>
             <FormGroup
               label='対戦相手'
@@ -120,7 +118,13 @@ const War = () => {
 
             <Roaster townHalls={townHalls} roaster={players.data} />
 
-            {isEditMode && <Button type='submit'>決定</Button>}
+            {isEditMode && (
+              <Button
+                className='text-gray-200 bg-violet-700 w-full'
+                type='submit'>
+                決定
+              </Button>
+            )}
           </form>
           <RoasterText
             roaster={Object.keys(players.data).reduce((obj, th) => {
