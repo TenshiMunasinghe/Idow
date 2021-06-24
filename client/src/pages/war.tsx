@@ -89,9 +89,12 @@ const War = () => {
         <context.Provider value={{ isEditMode, roasterTags, setRoasterTags }}>
           <div
             onClick={toggleEditMode}
-            className={`bg-${isEditMode ? 'violet' : 'gray'}-700 text-${
+            className={`flex space-x-2 items-center bg-${
+              isEditMode ? 'violet' : 'gray'
+            }-700 text-${
               isEditMode ? 'violet' : 'gray'
             }-200 w-min mb-5 rounded-md ml-auto p-2`}>
+            <span className='whitespace-nowrap'>編集</span>
             <PencilIcon className='w-5 h-5' />
           </div>
           <form onSubmit={handleSubmit(onSubmit)} className='space-y-5'>
