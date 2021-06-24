@@ -10,8 +10,10 @@ import {
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 import { WarType } from '../../../server/src/main'
+import { RoasterType } from '../../../server/src/utils/get_detailed_war'
 import FormGroup from '../components/FormGroup'
 import Roaster from '../components/Roaster'
+import RoasterText from '../components/RoasterText'
 import { useGetPlayers } from '../hooks/useGetPlayers'
 import { useGetWar } from '../hooks/useGetWar'
 import { dateToString } from '../utils/dateToString'
@@ -109,6 +111,19 @@ const War = () => {
               </button>
             )}
           </form>
+          <RoasterText
+            roaster={Object.keys(players.data).reduce((obj, th) => {
+              const playerDetails = players.data[th].filter(player =>
+                roasterTags?.includes(player.tag)
+              )
+              if (playerDetails.length === 0) return obj
+
+              obj[th] = players.data[th].filter(player =>
+                roasterTags?.includes(player.tag)
+              )
+              return obj
+            }, {} as RoasterType)}
+          />
         </context.Provider>
       )}
     </div>
