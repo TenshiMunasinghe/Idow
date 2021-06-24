@@ -106,7 +106,7 @@ app.get('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, v
                 war = _b.sent();
                 data = war.data();
                 if (!data) {
-                    res.json(404).json({ error: 'War not found' });
+                    res.status(404).json({ error: 'War not found' });
                     return [2 /*return*/];
                 }
                 formattedWar = format_war_1.formatWar(data, war.id);

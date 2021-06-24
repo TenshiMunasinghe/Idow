@@ -52,7 +52,7 @@ app.get('/api/war/:id', async (req, res) => {
     const war = await db.collection('wars').doc(req.params.id).get()
     const data = war.data()
     if (!data) {
-      res.json(404).json({ error: 'War not found' })
+      res.status(404).json({ error: 'War not found' })
       return
     }
     const formattedWar = formatWar(data as WarType, war.id)
