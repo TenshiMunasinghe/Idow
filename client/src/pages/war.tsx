@@ -71,12 +71,11 @@ const War = () => {
   const onSubmit = useCallback(
     async (values: FormData) => {
       const spin_time = values.spin_time || war.data?.spin_time
-      console.log(spin_time)
-
       if (!roasterTags || !spin_time) {
         alert('マッチング時間を入力してください')
         return
       }
+
       const data: Omit<FormattedWar, 'id'> = {
         ...values,
         roaster: roasterTags,
