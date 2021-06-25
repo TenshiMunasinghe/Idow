@@ -42,7 +42,7 @@ interface Context {
   setRoasterTags: Dispatch<SetStateAction<RoasterTags>>
 }
 
-const currentDate = new Date().toISOString().split('.')[0] + 'Z'
+const currentDate = new Date().toISOString().split('.')[0].slice(0, -3)
 
 export const context = createContext<Context>({
   isEditMode: false,
