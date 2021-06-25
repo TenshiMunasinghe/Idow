@@ -128,7 +128,7 @@ app.post('/api/war', function (req, res) { return __awaiter(void 0, void 0, void
             case 1: return [4 /*yield*/, (_a.sent()).get()];
             case 2:
                 newWar = _a.sent();
-                res.json("Added war with id <>" + newWar.id);
+                res.json(format_war_1.formatWar(newWar.data(), newWar.id));
                 return [3 /*break*/, 4];
             case 3:
                 error_2 = _a.sent();
@@ -156,6 +156,25 @@ app.put('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, v
             case 2:
                 error_3 = _a.sent();
                 res.status(400).json({ error: error_3 });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+app.delete('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var deleted, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, firebase_1.db.collection('wars').doc(req.params.id).delete()];
+            case 1:
+                deleted = _a.sent();
+                res.json("Deleted at " + deleted.writeTime.toDate().toString());
+                return [3 /*break*/, 3];
+            case 2:
+                error_4 = _a.sent();
+                res.status(400).json({ error: error_4 });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }

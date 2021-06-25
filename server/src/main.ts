@@ -65,7 +65,7 @@ app.post('/api/war', async (req, res) => {
     const newWar = await (
       await db.collection('wars').add(toFirebaseWar(war))
     ).get()
-    res.json(`Added war with id <>${newWar.id}`)
+    res.json(formatWar(newWar.data() as WarType, newWar.id))
   } catch (error) {
     res.status(400).json({ error })
   }
@@ -79,6 +79,14 @@ app.put('/api/war/:id', async (req, res) => {
       .doc(req.params.id)
       .update(toFirebaseWar(war))
     res.json(`Updated at ${updatedWar.writeTime.toDate().toString()}`)
+  } catch (error) {
+    res.status(400).json({ error })
+  }
+})
+app.delete('/api/war/:id', async (req, res) => {
+  try {
+    const deleted = await db.collection('wars').doc(req.params.id).delete()
+    res.json(`Deleted at ${deleted.writeTime.toDate().toString()}`)
   } catch (error) {
     res.status(400).json({ error })
   }
