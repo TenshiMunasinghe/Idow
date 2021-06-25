@@ -1,5 +1,5 @@
 import { Dialog } from '@headlessui/react'
-import { ClipboardIcon } from '@heroicons/react/solid'
+import { ClipboardCopyIcon } from '@heroicons/react/solid'
 import Markdown from 'markdown-to-jsx'
 import { useState } from 'react'
 import { RoasterType } from '../../../server/src/utils/get_detailed_war'
@@ -32,7 +32,7 @@ const RoasterText = ({ roaster }: Props) => {
           setIsOpen(true)
         }}>
         <span>コピー</span>
-        <ClipboardIcon className='w-5 h-5' />
+        <ClipboardCopyIcon className='w-5 h-5' />
       </Button>
 
       <Dialog
