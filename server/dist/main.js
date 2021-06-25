@@ -92,7 +92,7 @@ app.get('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, v
         switch (_b.label) {
             case 0:
                 if (req.params.id === 'new') {
-                    res.json({ opponent: '', spin_time: new Date().toString(), roaster: [] });
+                    res.json({ opponent: '', spin_time: '', roaster: [] });
                     return [2 /*return*/];
                 }
                 _b.label = 1;

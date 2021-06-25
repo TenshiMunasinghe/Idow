@@ -42,7 +42,7 @@ app.get('/api/wars', async (req, res) => {
 
 app.get('/api/war/:id', async (req, res) => {
   if (req.params.id === 'new') {
-    res.json({ opponent: '', spin_time: new Date().toString(), roaster: [] })
+    res.json({ opponent: '', spin_time: '', roaster: [] })
     return
   }
   try {
