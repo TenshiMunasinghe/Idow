@@ -59,21 +59,26 @@ app.get('/api/war/:id', async (req, res) => {
   }
 })
 
-app.post('/api/war', (req, res) => {
+app.post('/api/war', async (req, res) => {
   try {
     const war = req.body as Optional<FormattedWar, 'id'>
-    db.collection('wars').add(toFirebaseWar(war))
-    res.json(war)
+    const newWar = await (
+      await db.collection('wars').add(toFirebaseWar(war))
+    ).get()
+    res.json(`Added war with id <>${newWar.id}`)
   } catch (error) {
     res.status(400).json({ error })
   }
 })
 
-app.put('/api/war/:id', (req, res) => {
+app.put('/api/war/:id', async (req, res) => {
   try {
     const war = req.body as Optional<FormattedWar, 'id'>
-    db.collection('wars').doc(req.params.id).update(toFirebaseWar(war))
-    res.json(war)
+    const updatedWar = await db
+      .collection('wars')
+      .doc(req.params.id)
+      .update(toFirebaseWar(war))
+    res.json(`Updated at ${updatedWar.writeTime.toDate().toString()}`)
   } catch (error) {
     res.status(400).json({ error })
   }

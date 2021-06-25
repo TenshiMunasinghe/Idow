@@ -117,26 +117,50 @@ app.get('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, v
         }
     });
 }); });
-app.post('/api/war', function (req, res) {
-    try {
-        var war = req.body;
-        firebase_1.db.collection('wars').add(to_firebase_war_1.toFirebaseWar(war));
-        res.json(war);
-    }
-    catch (error) {
-        res.status(400).json({ error: error });
-    }
-});
-app.put('/api/war/:id', function (req, res) {
-    try {
-        var war = req.body;
-        firebase_1.db.collection('wars').doc(req.params.id).update(to_firebase_war_1.toFirebaseWar(war));
-        res.json(war);
-    }
-    catch (error) {
-        res.status(400).json({ error: error });
-    }
-});
+app.post('/api/war', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var war, newWar, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                war = req.body;
+                return [4 /*yield*/, firebase_1.db.collection('wars').add(to_firebase_war_1.toFirebaseWar(war))];
+            case 1: return [4 /*yield*/, (_a.sent()).get()];
+            case 2:
+                newWar = _a.sent();
+                res.json("Added war with id <>" + newWar.id);
+                return [3 /*break*/, 4];
+            case 3:
+                error_2 = _a.sent();
+                res.status(400).json({ error: error_2 });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+app.put('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var war, updatedWar, error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                war = req.body;
+                return [4 /*yield*/, firebase_1.db
+                        .collection('wars')
+                        .doc(req.params.id)
+                        .update(to_firebase_war_1.toFirebaseWar(war))];
+            case 1:
+                updatedWar = _a.sent();
+                res.json("Updated at " + updatedWar.writeTime.toDate().toString());
+                return [3 /*break*/, 3];
+            case 2:
+                error_3 = _a.sent();
+                res.status(400).json({ error: error_3 });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
