@@ -56,7 +56,7 @@ const War = () => {
   const players = useGetPlayers()
   const { register, handleSubmit } = useForm<FormData>()
 
-  const [isEditMode, setIsEditMode] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(id === 'new')
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [roasterTags, setRoasterTags] = useState<RoasterTags>(war.data?.roaster)
 
