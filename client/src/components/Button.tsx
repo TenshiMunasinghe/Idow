@@ -1,32 +1,17 @@
-import { ButtonHTMLAttributes, createElement, FC } from 'react'
-import { Link } from 'react-router-dom'
+import { ButtonHTMLAttributes, forwardRef } from 'react'
 
-interface Props
-  extends ButtonHTMLAttributes<HTMLButtonElement | HTMLAnchorElement> {
-  as?: 'link' | 'button'
-  to?: string
-}
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
-const Button: FC<Props> = ({
-  to = '/',
-  onClick,
-  type,
-  children,
-  className,
-  as = 'button',
-}) => {
-  const isLink = as === 'link'
-  const element = isLink ? Link : 'button'
-  return createElement(
-    element,
-    {
-      type,
-      onClick,
-      to: to,
-      className: `flex items-center justify-center text-center space-x-2 px-4 py-3 font-semibold rounded-md ${className} focus:outline-none focus:ring-2 focus:ring-gray-400`,
-    },
-    children
+const Button = forwardRef<HTMLButtonElement, Props>((props, ref) => {
+  const { className, ...attrs } = props
+  return (
+    <button
+      {...attrs}
+      ref={ref}
+      className={`flex items-center justify-center text-center space-x-2 px-4 py-3 font-semibold rounded-md ${className} focus:outline-none focus:ring-2 focus:ring-gray-400`}>
+      {props.children}
+    </button>
   )
-}
+})
 
 export default Button
