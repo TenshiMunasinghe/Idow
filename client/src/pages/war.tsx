@@ -18,6 +18,7 @@ import { FormattedWar } from '../../../server/src/utils/format_war'
 import { RoasterType } from '../../../server/src/utils/get_detailed_war'
 import Button from '../components/Button'
 import FormGroup from '../components/FormGroup'
+import LoadingIcon from '../components/LoadingIcon'
 import Roaster from '../components/Roaster'
 import RoasterText from '../components/RoasterText'
 import { useGetPlayers } from '../hooks/useGetPlayers'
@@ -111,7 +112,7 @@ const War = () => {
 
   return (
     <div className='p-5'>
-      {isLoading && <div>Loading...</div>}
+      {isLoading && <LoadingIcon />}
       {!isLoading && war.isError && id !== 'new' && <div>無効なID</div>}
       {!isLoading && war.data && players.data && (
         <context.Provider value={{ isEditMode, roasterTags, setRoasterTags }}>
