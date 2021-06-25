@@ -69,7 +69,7 @@ app.post('/api/war', (req, res) => {
   }
 })
 
-app.post('/api/war/:id', (req, res) => {
+app.put('/api/war/:id', (req, res) => {
   try {
     const war = req.body as Optional<FormattedWar, 'id'>
     db.collection('wars').doc(req.params.id).update(toFirebaseWar(war))

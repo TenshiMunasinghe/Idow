@@ -127,7 +127,7 @@ app.post('/api/war', function (req, res) {
         res.status(400).json({ error: error });
     }
 });
-app.post('/api/war/:id', function (req, res) {
+app.put('/api/war/:id', function (req, res) {
     try {
         var war = req.body;
         firebase_1.db.collection('wars').doc(req.params.id).update(to_firebase_war_1.toFirebaseWar(war));
