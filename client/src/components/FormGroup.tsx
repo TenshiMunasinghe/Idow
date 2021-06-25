@@ -1,37 +1,28 @@
+import { InputHTMLAttributes } from 'react'
 import { UseFormRegisterReturn } from 'react-hook-form'
 import Input from './Input'
 
-interface Props {
-  inputType: string
+interface Props extends InputHTMLAttributes<HTMLInputElement> {
   label: string
-  value: string
+  currentValue: string
   isEditMode: boolean
-  defaultInputValue?: string | number
   register: UseFormRegisterReturn
-  required: boolean
 }
 
 const FormGroup = ({
   isEditMode,
   label,
-  value,
-  defaultInputValue,
+  currentValue,
   register,
-  inputType,
-  required,
+  ...attrs
 }: Props) => {
   return (
     <div className='flex space-x-2 items-end'>
       <label className='whitespace-nowrap'>{label}</label>
       {isEditMode ? (
-        <Input
-          type={inputType}
-          register={register}
-          defaultValue={defaultInputValue}
-          required={required}
-        />
+        <Input {...attrs} register={register} />
       ) : (
-        <span className='font-semibold text-2xl'>{value}</span>
+        <span className='font-semibold text-2xl'>{currentValue}</span>
       )}
     </div>
   )
