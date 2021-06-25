@@ -39,9 +39,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getDetailedRoaster = void 0;
 var groupBy_1 = __importDefault(require("lodash/groupBy"));
 var coc_api_1 = require("./coc_api");
-exports.getDetailedRoaster = function (roaster) { return __awaiter(void 0, void 0, void 0, function () {
+var getDetailedRoaster = function (roaster) { return __awaiter(void 0, void 0, void 0, function () {
     var playersPromise, players;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -72,3 +73,4 @@ exports.getDetailedRoaster = function (roaster) { return __awaiter(void 0, void 
         }
     });
 }); };
+exports.getDetailedRoaster = getDetailedRoaster;
