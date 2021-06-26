@@ -1,8 +1,9 @@
 import express from 'express'
+import { cocClient } from './utils/coc_api'
 import { login_bot } from './utils/discord_bot'
 import { db, TimeStamp, toTimeStamp } from './utils/firebase'
 import { FormattedWar, formatWar } from './utils/format_war'
-import { getDetailedRoaster } from './utils/get_detailed_war'
+import { getDetailedRoaster } from './utils/get_detailed_roaster'
 import { toFirebaseWar } from './utils/to_firebase_war'
 
 const app = express()
@@ -25,6 +26,70 @@ app.get('/api/players', async (req, res) => {
 
   const players = await getDetailedRoaster(tags)
   res.json(players)
+})
+
+app.put('/api/player/:tag', async (req, res) => {
+  const { tag } = req.params
+
+  if (tag[0] !== '#') {
+    res.status(400).json({ error: 'INVALID_TAG' })
+    return
+  }
+
+  try {
+    const { name } = await cocClient.playerByTag(tag)
+
+    const collection = db.collection('players')
+    const doc = await collection.where('player_tag', '==', tag).get()
+
+    if (!doc.empty) {
+      res.status(400).json({ error: 'TAG_EXISTS' })
+      return
+    }
+
+    await collection.add({ player_tag: tag })
+
+    res.json({ name })
+  } catch (error) {
+    console.log(error)
+    if (error.statusCode === 404) {
+      res.status(404).json({ error: 'INVALID_TAG' })
+    } else {
+      res.status(500).json({ error })
+    }
+  }
+})
+
+app.delete('/api/player/:tag', async (req, res) => {
+  const { tag } = req.params
+
+  if (tag[0] !== '#') {
+    res.status(400).json({ error: 'INVALID_TAG' })
+    return
+  }
+
+  try {
+    const { name } = await cocClient.playerByTag(tag)
+
+    const collection = db.collection('players')
+    const doc = await collection.where('player_tag', '==', tag).get()
+
+    if (doc.empty) {
+      res.status(400).json({ error: 'TAG_DOES_NOT_EXIST' })
+      return
+    }
+
+    await doc.docs[0].ref.delete()
+
+    res.json({ name })
+  } catch (error) {
+    console.log(error)
+    if (error.statusCode === 404) {
+      res.status(404).json({ error: 'INVALID_TAG' })
+    } else {
+      res.status(500).json({ error })
+    }
+  }
 })
 
 app.get('/api/wars', async (req, res) => {
@@ -83,6 +148,7 @@ app.put('/api/war/:id', async (req, res) => {
     res.status(400).json({ error })
   }
 })
+
 app.delete('/api/war/:id', async (req, res) => {
   try {
     const deleted = await db.collection('wars').doc(req.params.id).delete()

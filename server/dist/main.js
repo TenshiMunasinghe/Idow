@@ -40,10 +40,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
+var coc_api_1 = require("./utils/coc_api");
 var discord_bot_1 = require("./utils/discord_bot");
 var firebase_1 = require("./utils/firebase");
 var format_war_1 = require("./utils/format_war");
-var get_detailed_war_1 = require("./utils/get_detailed_war");
+var get_detailed_roaster_1 = require("./utils/get_detailed_roaster");
 var to_firebase_war_1 = require("./utils/to_firebase_war");
 var app = express_1.default();
 app.use(express_1.default.json());
@@ -56,7 +57,7 @@ app.get('/api/players', function (req, res) { return __awaiter(void 0, void 0, v
             case 1:
                 snapshot = _a.sent();
                 tags = snapshot.docs.map(function (s) { return s.data().player_tag; });
-                return [4 /*yield*/, get_detailed_war_1.getDetailedRoaster(tags)];
+                return [4 /*yield*/, get_detailed_roaster_1.getDetailedRoaster(tags)];
             case 2:
                 players = _a.sent();
                 res.json(players);
@@ -64,8 +65,94 @@ app.get('/api/players', function (req, res) { return __awaiter(void 0, void 0, v
         }
     });
 }); });
+app.put('/api/player/:tag', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var tag, name_1, collection, doc, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                tag = req.params.tag;
+                if (tag[0] !== '#') {
+                    res.status(400).json({ error: 'INVALID_TAG' });
+                    return [2 /*return*/];
+                }
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 5, , 6]);
+                return [4 /*yield*/, coc_api_1.cocClient.playerByTag(tag)];
+            case 2:
+                name_1 = (_a.sent()).name;
+                collection = firebase_1.db.collection('players');
+                return [4 /*yield*/, collection.where('player_tag', '==', tag).get()];
+            case 3:
+                doc = _a.sent();
+                if (!doc.empty) {
+                    res.status(400).json({ error: 'TAG_EXISTS' });
+                    return [2 /*return*/];
+                }
+                return [4 /*yield*/, collection.add({ player_tag: tag })];
+            case 4:
+                _a.sent();
+                res.json({ name: name_1 });
+                return [3 /*break*/, 6];
+            case 5:
+                error_1 = _a.sent();
+                console.log(error_1);
+                if (error_1.statusCode === 404) {
+                    res.status(404).json({ error: 'INVALID_TAG' });
+                }
+                else {
+                    res.status(500).json({ error: error_1 });
+                }
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
+        }
+    });
+}); });
+app.delete('/api/player/:tag', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var tag, name_2, collection, doc, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                tag = req.params.tag;
+                if (tag[0] !== '#') {
+                    res.status(400).json({ error: 'INVALID_TAG' });
+                    return [2 /*return*/];
+                }
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 5, , 6]);
+                return [4 /*yield*/, coc_api_1.cocClient.playerByTag(tag)];
+            case 2:
+                name_2 = (_a.sent()).name;
+                collection = firebase_1.db.collection('players');
+                return [4 /*yield*/, collection.where('player_tag', '==', tag).get()];
+            case 3:
+                doc = _a.sent();
+                if (doc.empty) {
+                    res.status(400).json({ error: 'TAG_DOES_NOT_EXIST' });
+                    return [2 /*return*/];
+                }
+                return [4 /*yield*/, doc.docs[0].ref.delete()];
+            case 4:
+                _a.sent();
+                res.json({ name: name_2 });
+                return [3 /*break*/, 6];
+            case 5:
+                error_2 = _a.sent();
+                console.log(error_2);
+                if (error_2.statusCode === 404) {
+                    res.status(404).json({ error: 'INVALID_TAG' });
+                }
+                else {
+                    res.status(500).json({ error: error_2 });
+                }
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
+        }
+    });
+}); });
 app.get('/api/wars', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var wars, error_1;
+    var wars, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -79,7 +166,7 @@ app.get('/api/wars', function (req, res) { return __awaiter(void 0, void 0, void
                 res.json(wars.docs.map(function (d) { return format_war_1.formatWar(d.data(), d.id); }));
                 return [3 /*break*/, 3];
             case 2:
-                error_1 = _a.sent();
+                error_3 = _a.sent();
                 res.status(500).json({ error: 'Internal server error' });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
@@ -118,7 +205,7 @@ app.get('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, v
     });
 }); });
 app.post('/api/war', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var war, newWar, error_2;
+    var war, newWar, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -131,15 +218,15 @@ app.post('/api/war', function (req, res) { return __awaiter(void 0, void 0, void
                 res.json(format_war_1.formatWar(newWar.data(), newWar.id));
                 return [3 /*break*/, 4];
             case 3:
-                error_2 = _a.sent();
-                res.status(400).json({ error: error_2 });
+                error_4 = _a.sent();
+                res.status(400).json({ error: error_4 });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); });
 app.put('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var war, updatedWar, error_3;
+    var war, updatedWar, error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -154,15 +241,15 @@ app.put('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, v
                 res.json("Updated at " + updatedWar.writeTime.toDate().toString());
                 return [3 /*break*/, 3];
             case 2:
-                error_3 = _a.sent();
-                res.status(400).json({ error: error_3 });
+                error_5 = _a.sent();
+                res.status(400).json({ error: error_5 });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); });
 app.delete('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var deleted, error_4;
+    var deleted, error_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -173,8 +260,8 @@ app.delete('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0
                 res.json("Deleted at " + deleted.writeTime.toDate().toString());
                 return [3 /*break*/, 3];
             case 2:
-                error_4 = _a.sent();
-                res.status(400).json({ error: error_4 });
+                error_6 = _a.sent();
+                res.status(400).json({ error: error_6 });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
