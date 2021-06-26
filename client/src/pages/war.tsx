@@ -188,7 +188,7 @@ const War = () => {
               <Button
                 className='text-gray-200 bg-violet-700 w-full'
                 type='submit'>
-                決定
+                保存
               </Button>
             )}
           </form>
