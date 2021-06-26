@@ -1,7 +1,7 @@
 import { Disclosure } from '@headlessui/react'
 import { ChevronUpIcon } from '@heroicons/react/solid'
 import { ChangeEvent, useContext } from 'react'
-import { Player } from '../../../server/src/utils/get_detailed_war'
+import { Player } from '../../../server/src/utils/get_detailed_roaster'
 import { context } from '../pages/war'
 
 interface Props {

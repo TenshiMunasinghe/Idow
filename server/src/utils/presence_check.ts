@@ -1,6 +1,6 @@
 import { isArray } from 'lodash'
 import { parsed } from './config'
-import { Player, RoasterType } from './get_detailed_war'
+import { Player, RoasterType } from './get_detailed_roaster'
 
 export const presenceCheck = (roaster: Player[] | RoasterType) => {
   const roasterArr = isArray(roaster)

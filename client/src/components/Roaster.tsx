@@ -1,5 +1,5 @@
 import { memo, useContext } from 'react'
-import { RoasterType } from '../../../server/src/utils/get_detailed_war'
+import { RoasterType } from '../../../server/src/utils/get_detailed_roaster'
 import { context } from '../pages/war'
 import Players from './Players'
 
