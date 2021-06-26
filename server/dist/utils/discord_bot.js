@@ -73,7 +73,7 @@ exports.login_bot = void 0;
 var axios_1 = __importDefault(require("axios"));
 var Discord = __importStar(require("discord.js"));
 var config_1 = require("./config");
-var get_detailed_war_1 = require("./get_detailed_war");
+var get_detailed_roaster_1 = require("./get_detailed_roaster");
 var presence_check_1 = require("./presence_check");
 var dcClient = new Discord.Client();
 var axios = axios_1.default.create({ baseURL: 'http://localhost:5000' });
@@ -98,8 +98,68 @@ var handleWar = function (message, args) { return __awaiter(void 0, void 0, void
                 }
                 _a = [__assign({}, data)];
                 _b = {};
-                return [4 /*yield*/, get_detailed_war_1.getDetailedRoaster(data.roaster)];
+                return [4 /*yield*/, get_detailed_roaster_1.getDetailedRoaster(data.roaster)];
             case 2: return [2 /*return*/, __assign.apply(void 0, _a.concat([(_b.roaster = _c.sent(), _b)]))];
+        }
+    });
+}); };
+var handlePlayers = function (message, option, args) { return __awaiter(void 0, void 0, void 0, function () {
+    var invalidTags, requestHandler_1, promises, response, succeeded, errorred, erroredText, succeededText, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!args) {
+                    message.channel.send('登録するプレイヤーを入力してください。');
+                    return [2 /*return*/];
+                }
+                invalidTags = args.filter(function (tag) { return tag[0] !== '#'; });
+                if (invalidTags.length > 0) {
+                    message.channel.send('無効なタグがありました。\n' + invalidTags.join('\n'));
+                    return [2 /*return*/];
+                }
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                requestHandler_1 = option === 'add' ? axios.put : axios.delete;
+                promises = args.map(function (tag) { return __awaiter(void 0, void 0, void 0, function () {
+                    var data, _a, response_1;
+                    return __generator(this, function (_b) {
+                        switch (_b.label) {
+                            case 0:
+                                _b.trys.push([0, 2, , 3]);
+                                return [4 /*yield*/, requestHandler_1("/api/player/" + tag.replace('#', '%23'))];
+                            case 1:
+                                data = (_b.sent()).data;
+                                return [2 /*return*/, __assign(__assign({}, data), { tag: tag })];
+                            case 2:
+                                _a = _b.sent();
+                                response_1 = _a.response;
+                                return [2 /*return*/, __assign(__assign({}, response_1.data), { tag: tag })];
+                            case 3: return [2 /*return*/];
+                        }
+                    });
+                }); });
+                return [4 /*yield*/, Promise.all(promises)];
+            case 2:
+                response = _a.sent();
+                console.log(response);
+                succeeded = response.filter(function (res) { return !res.error; });
+                errorred = response.filter(function (res) { return res.error; });
+                erroredText = errorred.length > 0
+                    ? '無効なタグがありました。\n' +
+                        errorred.map(function (e) { return e.tag; }).join('\n') +
+                        '\n\n'
+                    : '';
+                succeededText = succeeded.length > 0
+                    ? succeeded.length + "\u4EBA\u3092" + (option === 'add' ? '追加' : '削除') + "\u3057\u307E\u3057\u305F\u3002\n" + succeeded.map(function (a) { return a.name; }).join('\n')
+                    : '';
+                message.channel.send(erroredText + succeededText);
+                return [3 /*break*/, 4];
+            case 3:
+                error_1 = _a.sent();
+                console.error('error');
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
@@ -170,6 +230,28 @@ var commands = {
             });
         },
         description: '参加メンバー一覧: `<War_ID>`',
+    },
+    add: {
+        action: function (message, args) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    handlePlayers(message, 'add', args);
+                    return [2 /*return*/];
+                });
+            });
+        },
+        description: 'プレイヤーを登録: <Player_Tag>...',
+    },
+    remove: {
+        action: function (message, args) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    handlePlayers(message, 'remove', args);
+                    return [2 /*return*/];
+                });
+            });
+        },
+        description: 'プレイヤーの登録を削除: <Player_Tag>...',
     },
     idow: {
         action: function (message, args) {

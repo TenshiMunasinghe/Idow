@@ -2,7 +2,7 @@ import _axios from 'axios'
 import * as Discord from 'discord.js'
 import { parsed } from './config'
 import { FormattedWar } from './format_war'
-import { DetailedWar, getDetailedRoaster } from './get_detailed_war'
+import { DetailedWar, getDetailedRoaster } from './get_detailed_roaster'
 import { presenceCheck } from './presence_check'
 
 const dcClient = new Discord.Client()
@@ -36,6 +36,64 @@ const handleWar = async (message: Discord.Message, args?: string[]) => {
     ...data,
     roaster: await getDetailedRoaster(data.roaster),
   } as DetailedWar
+}
+
+const handlePlayers = async (
+  message: Discord.Message,
+  option: 'add' | 'remove',
+  args?: string[]
+) => {
+  if (!args) {
+    message.channel.send('登録するプレイヤーを入力してください。')
+    return
+  }
+
+  const invalidTags = args.filter(tag => tag[0] !== '#')
+
+  if (invalidTags.length > 0) {
+    message.channel.send('無効なタグがありました。\n' + invalidTags.join('\n'))
+    return
+  }
+
+  try {
+    const requestHandler = option === 'add' ? axios.put : axios.delete
+
+    const promises = args.map(async tag => {
+      try {
+        const { data } = await requestHandler(
+          `/api/player/${tag.replace('#', '%23')}`
+        )
+        return { ...data, tag }
+      } catch ({ response }) {
+        return { ...response.data, tag }
+      }
+    })
+
+    const response = await Promise.all(promises)
+
+    console.log(response)
+
+    const succeeded = response.filter(res => !res.error)
+    const errorred = response.filter(res => res.error)
+
+    const erroredText =
+      errorred.length > 0
+        ? '無効なタグがありました。\n' +
+          errorred.map(e => e.tag).join('\n') +
+          '\n\n'
+        : ''
+
+    const succeededText =
+      succeeded.length > 0
+        ? `${succeeded.length}人を${
+            option === 'add' ? '追加' : '削除'
+          }しました。\n` + succeeded.map(a => a.name).join('\n')
+        : ''
+
+    message.channel.send(erroredText + succeededText)
+  } catch (error) {
+    console.error('error')
+  }
 }
 
 const commands: Commands = {
@@ -97,6 +155,20 @@ const commands: Commands = {
       message.channel.send(`vs **${war.opponent}**\n\n` + roaster)
     },
     description: '参加メンバー一覧: `<War_ID>`',
+  },
+
+  add: {
+    async action(message, args) {
+      handlePlayers(message, 'add', args)
+    },
+    description: 'プレイヤーを登録: <Player_Tag>...',
+  },
+
+  remove: {
+    async action(message, args) {
+      handlePlayers(message, 'remove', args)
+    },
+    description: 'プレイヤーの登録を削除: <Player_Tag>...',
   },
 
   idow: {
