@@ -29,12 +29,7 @@ export interface FormData extends Omit<WarType, 'spin_time'> {
   spin_time: string
 }
 
-// like:
-//  {
-//   '11': ['#htrhst', ...],
-//   '12': ['fdgfgfa',...]
-//  }
-type RoasterTags = string[] | undefined
+type RoasterTags = string[]
 
 interface Context {
   isEditMode: boolean
@@ -59,12 +54,14 @@ const War = () => {
 
   const [isEditMode, setIsEditMode] = useState(id === 'new')
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [roasterTags, setRoasterTags] = useState<RoasterTags>(war.data?.roaster)
+  const [roasterTags, setRoasterTags] = useState<RoasterTags>(
+    war.data?.roaster || []
+  )
 
   const cancelBtnRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
-    setRoasterTags(war.data?.roaster)
+    setRoasterTags(war.data?.roaster || [])
   }, [war.data?.roaster])
 
   const isLoading = war.isLoading || players.isLoading
@@ -72,7 +69,8 @@ const War = () => {
   const onSubmit = useCallback(
     async (values: FormData) => {
       const spin_time = values.spin_time || war.data?.spin_time
-      if (!roasterTags || !spin_time) {
+
+      if (!spin_time) {
         alert('マッチング時間を入力してください')
         return
       }
@@ -82,6 +80,7 @@ const War = () => {
         roaster: roasterTags,
         spin_time,
       }
+
       if (war.data?.id) {
         await ky.put(`/api/war/${war.data?.id}`, { json: data })
         history.go(0)
@@ -195,13 +194,12 @@ const War = () => {
           <RoasterText
             roaster={Object.keys(players.data).reduce((obj, th) => {
               const playerDetails = players.data[th].filter(player =>
-                roasterTags?.includes(player.tag)
+                roasterTags.includes(player.tag)
               )
               if (playerDetails.length === 0) return obj
 
-              obj[th] = players.data[th].filter(player =>
-                roasterTags?.includes(player.tag)
-              )
+              obj[th] = playerDetails
+
               return obj
             }, {} as RoasterType)}
           />
