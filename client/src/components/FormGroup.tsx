@@ -17,7 +17,7 @@ const FormGroup = ({
   ...attrs
 }: Props) => {
   return (
-    <div className='flex space-x-2 items-end'>
+    <div className='flex flex-col space-y-2'>
       <label className='whitespace-nowrap'>{label}</label>
       {isEditMode ? (
         <Input {...attrs} register={register} />
