@@ -26,7 +26,8 @@ const RoasterText = ({ roaster }: Props) => {
         <Markdown>{text.replaceAll('\n', '<br/>')}</Markdown>
       </p>
       <Button
-        className='bg-violet-700 text-gray-200 w-full'
+        color='violet'
+        size='lg'
         onClick={() => {
           navigator.clipboard.writeText(text)
           setIsOpen(true)
@@ -43,9 +44,7 @@ const RoasterText = ({ roaster }: Props) => {
 
         <div className='flex flex-col items-center justify-center bg-violet-200 w-3/5 py-4 px-6 space-y-3 rounded-md text-violet-800 z-10'>
           <Dialog.Title>コピー完了！</Dialog.Title>
-          <Button
-            onClick={() => setIsOpen(false)}
-            className='bg-violet-300 w-full'>
+          <Button onClick={() => setIsOpen(false)} color='violet' size='lg'>
             OK
           </Button>
         </div>

@@ -119,16 +119,16 @@ const War = () => {
             {id !== 'new' && (
               <Button
                 onClick={() => setIsDialogOpen(true)}
-                className='bg-rose-700 text-gray-200 w-min'>
+                color='rose'
+                size='md'>
                 <span className='whitespace-nowrap'>削除</span>
                 <TrashIcon className='w-5 h-5' />
               </Button>
             )}
             <Button
               onClick={() => setIsEditMode(prev => !prev)}
-              className={`bg-${isEditMode ? 'violet' : 'gray'}-700 text-${
-                isEditMode ? 'violet' : 'gray'
-              }-200 w-min`}>
+              color={isEditMode ? 'violet' : 'gray'}
+              size='md'>
               <span className='whitespace-nowrap'>編集</span>
               <PencilIcon className='w-5 h-5' />
             </Button>
@@ -145,15 +145,14 @@ const War = () => {
                 本当に削除しますか？
               </Dialog.Title>
               <div className='flex space-x-3'>
-                <Button
-                  onClick={deleteWar}
-                  className='bg-rose-300 text-rose-800'>
+                <Button onClick={deleteWar} color='rose' size='lg'>
                   はい
                 </Button>
                 <Button
                   onClick={() => setIsDialogOpen(false)}
                   ref={cancelBtnRef}
-                  className='bg-gray-300 text-gray-800'>
+                  color='gray'
+                  size='md'>
                   キャンセル
                 </Button>
               </div>
@@ -184,9 +183,7 @@ const War = () => {
             <Roaster townHalls={townHalls} roaster={players.data} />
 
             {isEditMode && (
-              <Button
-                className='text-gray-200 bg-violet-700 w-full'
-                type='submit'>
+              <Button color='violet' size='lg' type='submit'>
                 保存
               </Button>
             )}
