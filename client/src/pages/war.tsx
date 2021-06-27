@@ -21,6 +21,7 @@ import FormGroup from '../components/FormGroup'
 import LoadingIcon from '../components/LoadingIcon'
 import Roaster from '../components/Roaster'
 import RoasterText from '../components/RoasterText'
+import WarList from '../components/WarList'
 import { useGetPlayers } from '../hooks/useGetPlayers'
 import { useGetWar } from '../hooks/useGetWar'
 import { dateToString } from '../utils/dateToString'
@@ -115,91 +116,101 @@ const War = () => {
       {!isLoading && war.isError && id !== 'new' && <div>無効なID</div>}
       {!isLoading && war.data && players.data && (
         <context.Provider value={{ isEditMode, roasterTags, setRoasterTags }}>
-          <div className='flex mb-5 ml-auto space-x-3 justify-end'>
-            {id !== 'new' && (
-              <Button
-                onClick={() => setIsDialogOpen(true)}
-                color='rose'
-                size='md'>
-                <span className='whitespace-nowrap'>削除</span>
-                <TrashIcon className='w-5 h-5' />
-              </Button>
-            )}
-            <Button
-              onClick={() => setIsEditMode(prev => !prev)}
-              color={isEditMode ? 'violet' : 'gray'}
-              size='md'>
-              <span className='whitespace-nowrap'>編集</span>
-              <PencilIcon className='w-5 h-5' />
-            </Button>
-          </div>
-
-          <Dialog
-            open={isDialogOpen}
-            onClose={() => setIsDialogOpen(false)}
-            initialFocus={cancelBtnRef}
-            className='fixed z-10 inset-0 flex items-center justify-center'>
-            <Dialog.Overlay className='fixed inset-0 opacity-50 bg-gray-900' />
-            <div className='bg-rose-200 z-10 grid p-5 rounded-md items-center justify-center gap-y-2'>
-              <Dialog.Title className='flex-grow text-rose-800 text-center'>
-                本当に削除しますか？
-              </Dialog.Title>
-              <div className='flex space-x-3'>
-                <Button onClick={deleteWar} color='rose' size='lg'>
-                  はい
-                </Button>
+          <div className='grid lg:grid-cols-3'>
+            <WarList
+              className='hidden lg:flex lg:flex-col'
+              showLoadingSpinner={false}
+            />
+            <div className='flex flex-col justify-center'>
+              <div className='flex mb-5 ml-auto space-x-3 justify-end'>
+                {id !== 'new' && (
+                  <Button
+                    onClick={() => setIsDialogOpen(true)}
+                    color='rose'
+                    size='md'>
+                    <span className='whitespace-nowrap'>削除</span>
+                    <TrashIcon className='w-5 h-5' />
+                  </Button>
+                )}
                 <Button
-                  onClick={() => setIsDialogOpen(false)}
-                  ref={cancelBtnRef}
-                  color='gray'
+                  onClick={() => setIsEditMode(prev => !prev)}
+                  color={isEditMode ? 'violet' : 'gray'}
                   size='md'>
-                  キャンセル
+                  <span className='whitespace-nowrap'>編集</span>
+                  <PencilIcon className='w-5 h-5' />
                 </Button>
               </div>
+
+              <Dialog
+                open={isDialogOpen}
+                onClose={() => setIsDialogOpen(false)}
+                initialFocus={cancelBtnRef}
+                className='fixed z-10 inset-0 flex items-center justify-center'>
+                <Dialog.Overlay className='fixed inset-0 opacity-50 bg-gray-900' />
+                <div className='bg-rose-200 z-10 grid p-5 rounded-md items-center justify-center gap-y-2'>
+                  <Dialog.Title className='flex-grow text-rose-800 text-center'>
+                    本当に削除しますか？
+                  </Dialog.Title>
+                  <div className='flex space-x-3'>
+                    <Button onClick={deleteWar} color='rose' size='lg'>
+                      はい
+                    </Button>
+                    <Button
+                      onClick={() => setIsDialogOpen(false)}
+                      ref={cancelBtnRef}
+                      color='gray'
+                      size='md'>
+                      キャンセル
+                    </Button>
+                  </div>
+                </div>
+              </Dialog>
+
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className='flex flex-col space-y-5'>
+                <FormGroup
+                  label='対戦相手'
+                  type='text'
+                  isEditMode={isEditMode}
+                  register={register('opponent')}
+                  defaultValue={war.data.opponent}
+                  currentValue={war.data.opponent}
+                  required={true}
+                />
+
+                <FormGroup
+                  label='マッチング時間'
+                  type='datetime-local'
+                  isEditMode={isEditMode}
+                  register={register('spin_time')}
+                  currentValue={dateToString(new Date(war.data.spin_time))}
+                  min={currentDate}
+                  required={false}
+                />
+
+                <Roaster townHalls={townHalls} roaster={players.data} />
+
+                {isEditMode && (
+                  <Button color='violet' size='lg' type='submit'>
+                    保存
+                  </Button>
+                )}
+              </form>
             </div>
-          </Dialog>
+            <RoasterText
+              roaster={Object.keys(players.data).reduce((obj, th) => {
+                const playerDetails = players.data[th].filter(player =>
+                  roasterTags.includes(player.tag)
+                )
+                if (playerDetails.length === 0) return obj
 
-          <form onSubmit={handleSubmit(onSubmit)} className='space-y-5'>
-            <FormGroup
-              label='対戦相手'
-              type='text'
-              isEditMode={isEditMode}
-              register={register('opponent')}
-              defaultValue={war.data.opponent}
-              currentValue={war.data.opponent}
-              required={true}
+                obj[th] = playerDetails
+
+                return obj
+              }, {} as RoasterType)}
             />
-
-            <FormGroup
-              label='マッチング時間'
-              type='datetime-local'
-              isEditMode={isEditMode}
-              register={register('spin_time')}
-              currentValue={dateToString(new Date(war.data.spin_time))}
-              min={currentDate}
-              required={false}
-            />
-
-            <Roaster townHalls={townHalls} roaster={players.data} />
-
-            {isEditMode && (
-              <Button color='violet' size='lg' type='submit'>
-                保存
-              </Button>
-            )}
-          </form>
-          <RoasterText
-            roaster={Object.keys(players.data).reduce((obj, th) => {
-              const playerDetails = players.data[th].filter(player =>
-                roasterTags.includes(player.tag)
-              )
-              if (playerDetails.length === 0) return obj
-
-              obj[th] = playerDetails
-
-              return obj
-            }, {} as RoasterType)}
-          />
+          </div>
         </context.Provider>
       )}
     </div>
