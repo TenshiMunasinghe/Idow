@@ -21,7 +21,7 @@ const RoasterText = ({ roaster }: Props) => {
     )
     .join('\n\n')
   return (
-    <div className='py-7 space-y-3'>
+    <div className='flex flex-col justify-center py-7 space-y-3'>
       <p className='bg-gray-800 px-3 py-5 rounded'>
         <Markdown>{text.replaceAll('\n', '<br/>')}</Markdown>
       </p>
