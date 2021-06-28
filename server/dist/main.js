@@ -48,6 +48,7 @@ var get_detailed_roaster_1 = require("./utils/get_detailed_roaster");
 var to_firebase_war_1 = require("./utils/to_firebase_war");
 var app = express_1.default();
 app.use(express_1.default.json());
+app.use(express_1.default.static('../client/build'));
 app.listen(5000);
 app.get('/api/players', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var snapshot, tags, players;

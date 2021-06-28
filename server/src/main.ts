@@ -18,6 +18,8 @@ export interface WarType {
 
 app.use(express.json())
 
+app.use(express.static('../client/build'))
+
 app.listen(5000)
 
 app.get('/api/players', async (req, res) => {
