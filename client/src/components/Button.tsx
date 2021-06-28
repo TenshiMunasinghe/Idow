@@ -26,7 +26,7 @@ const Button = forwardRef<HTMLButtonElement, Props>((props, ref) => {
     <button
       {...attrs}
       ref={ref}
-      className={`inline-flex items-center justify-center text-center whitespace-nowrap py-3 font-semibold rounded-md focus:outline-none focus:ring-2 ${SIZE_MAPS[size]} ${COLOR_MAPS[color]}`}>
+      className={`inline-flex items-center justify-center text-center whitespace-nowrap py-3 font-semibold rounded-md focus:outline-none focus:ring-2 space-x-1 ${SIZE_MAPS[size]} ${COLOR_MAPS[color]}`}>
       {props.children}
     </button>
   )
