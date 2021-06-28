@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start": "node dist/main.js",
     "watch": "tsc -w",
-    "start": "npx nodemon dist/main.js"
+    "dev": "npx nodemon dist/main.js",
+    "build": "tsc -p ./"
   },
   "repository": {
     "type": "git",
