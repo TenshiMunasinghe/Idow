@@ -12,7 +12,7 @@ const WarList = ({ showLoadingSpinner = true, className }: Props) => {
 
   return (
     <div className={'relative ' + className}>
-      {showLoadingSpinner && (
+      {isLoading && showLoadingSpinner && (
         <div className={'absolute inset-0 flex justify-center items-center'}>
           <LoadingIcon />
         </div>
