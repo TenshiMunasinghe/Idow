@@ -21,7 +21,6 @@ import FormGroup from '../components/FormGroup'
 import LoadingIcon from '../components/LoadingIcon'
 import Roaster from '../components/Roaster'
 import RoasterText from '../components/RoasterText'
-import WarList from '../components/WarList'
 import { useGetPlayers } from '../hooks/useGetPlayers'
 import { useGetWar } from '../hooks/useGetWar'
 import { dateToString } from '../utils/dateToString'
@@ -111,7 +110,7 @@ const War = () => {
   }, [war.data?.id, history])
 
   return (
-    <div className='p-5 relative'>
+    <div className='p-5 lg:py-12 lg:px-16 relative'>
       {isLoading && (
         <div className={'absolute inset-0 flex justify-center items-center'}>
           <LoadingIcon />
@@ -120,11 +119,7 @@ const War = () => {
       {!isLoading && war.isError && id !== 'new' && <div>無効なID</div>}
       {!isLoading && war.data && players.data && (
         <context.Provider value={{ isEditMode, roasterTags, setRoasterTags }}>
-          <div className='grid lg:grid-cols-3'>
-            <WarList
-              className='hidden lg:flex lg:flex-col'
-              showLoadingSpinner={false}
-            />
+          <div className='grid gap-y-10 lg:grid-cols-2 lg:gap-y-0 lg:gap-x-16'>
             <div className='flex flex-col justify-center'>
               <div className='flex mb-5 ml-auto space-x-3 justify-end'>
                 {id !== 'new' && (
@@ -172,7 +167,7 @@ const War = () => {
 
               <form
                 onSubmit={handleSubmit(onSubmit)}
-                className='flex flex-col space-y-5'>
+                className='flex lg:block flex-col space-y-5 lg:space-y-8'>
                 <FormGroup
                   label='対戦相手'
                   type='text'

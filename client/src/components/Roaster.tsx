@@ -12,7 +12,7 @@ const Roaster = ({ townHalls, roaster }: Props) => {
   const { roasterTags } = useContext(context)
 
   return (
-    <div className='grid gap-y-3'>
+    <div className='space-y-3'>
       <div className='text-violet-200 font-bold text-lg'>
         計 {roasterTags?.length}
       </div>

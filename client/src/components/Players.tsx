@@ -44,8 +44,7 @@ const Players = ({ townHall, players }: Props) => {
     <Disclosure>
       {({ open }) => (
         <>
-          <Disclosure.Button
-            className={`flex w-full items-center py-2 px-4 rounded-md bg-gray-700 focus:outline-none focus:ring-1 focus:ring-violet-500 overflow-hidden`}>
+          <Disclosure.Button className='flex w-full max-w-2xl items-center py-2 px-4 rounded-md bg-gray-700 focus:outline-none focus:ring-1 focus:ring-violet-500 overflow-hidden'>
             <span
               className={`text-lg font-semibold ${
                 TH_COLORS[townHall] || 'text-gray-300'
@@ -59,14 +58,18 @@ const Players = ({ townHall, players }: Props) => {
               } w-5 h-5 ml-auto text-gray-300`}
             />
           </Disclosure.Button>
-          <Disclosure.Panel as='ul' className='my-2 pl-3'>
+          <Disclosure.Panel
+            as='ul'
+            className='my-2 px-5 divide-y-2 divide-gray-700'>
             {players.map(player => (
-              <li key={player.tag}>
+              <li
+                key={player.tag}
+                className='flex justify-between items-center py-3'>
                 {isEditMode ? (
                   <>
                     <label>{player.name}</label>
                     <input
-                      className='text-violet-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-violet-600 ml-2'
+                      className='text-violet-600 w-5 h-5 rounded-sm focus:outline-none focus:ring-2 focus:ring-violet-600 ml-2'
                       type='checkbox'
                       name={player.name}
                       value={player.tag}

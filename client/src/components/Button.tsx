@@ -7,9 +7,10 @@ const SIZE_MAPS = {
 }
 
 const COLOR_MAPS = {
-  violet: 'bg-violet-700 text-violet-100 ring-violet-400',
-  gray: 'bg-gray-700 text-gray-100 ring-gray-400',
-  rose: 'bg-rose-700 text-rose-100 ring-rose-400',
+  violet:
+    'bg-violet-700 hover:bg-violet-600 active:bg-violet-500 text-violet-100 ring-violet-400',
+  gray: 'bg-gray-700 hover:bg-gray-600 active:bg-gray-500 text-gray-100 ring-gray-400',
+  rose: 'bg-rose-700 hover:bg-rose-600 active:bg-rose-500 text-rose-100 ring-rose-400',
 }
 
 interface Props
