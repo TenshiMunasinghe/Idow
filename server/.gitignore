@@ -107,3 +107,6 @@ typings/
 
 #config files
 config
+
+#auto generated js files
+dist/
