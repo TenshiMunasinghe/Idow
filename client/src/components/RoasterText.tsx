@@ -14,12 +14,9 @@ const RoasterText = ({ roaster }: Props) => {
 
   const text = Object.keys(roaster)
     .sort((a, b) => parseInt(b) - parseInt(a))
-    .map(
-      th =>
-        `**TH${th}**\n` +
-        roaster[th].map(({ name, clan }) => `${name} @ ${clan.name}`).join('\n')
-    )
+    .map(th => `**TH${th}**\n` + roaster[th].map(({ name }) => name).join('\n'))
     .join('\n\n')
+
   return (
     <div className='flex lg:block flex-col space-y-3 lg:space-y-8'>
       <p className='bg-gray-800 px-3 py-5 rounded w-full'>
