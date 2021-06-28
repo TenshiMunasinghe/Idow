@@ -10,10 +10,10 @@ interface Props {
 }
 
 const TH_COLORS: { [key: number]: string } = {
-  11: 'red',
-  12: 'cyan',
-  13: 'blue',
-  14: 'yellow',
+  11: 'text-red-300',
+  12: 'text-cyan-300',
+  13: 'text-blue-300',
+  14: 'text-yellow-300',
 }
 
 const Players = ({ townHall, players }: Props) => {
@@ -47,9 +47,9 @@ const Players = ({ townHall, players }: Props) => {
           <Disclosure.Button
             className={`flex w-full items-center py-2 px-4 rounded-md bg-gray-700 focus:outline-none focus:ring-1 focus:ring-violet-500 overflow-hidden`}>
             <span
-              className={`text-lg font-semibold text-${
-                TH_COLORS[townHall] || 'gray'
-              }-300`}>
+              className={`text-lg font-semibold ${
+                TH_COLORS[townHall] || 'text-gray-300'
+              }`}>
               TH{townHall}
             </span>
             <span className='text-lg ml-1 letter'>({selected.length})</span>
