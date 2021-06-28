@@ -111,8 +111,12 @@ const War = () => {
   }, [war.data?.id, history])
 
   return (
-    <div className='p-5'>
-      {isLoading && <LoadingIcon />}
+    <div className='p-5 relative'>
+      {isLoading && (
+        <div className={'absolute inset-0 flex justify-center items-center'}>
+          <LoadingIcon />
+        </div>
+      )}
       {!isLoading && war.isError && id !== 'new' && <div>無効なID</div>}
       {!isLoading && war.data && players.data && (
         <context.Provider value={{ isEditMode, roasterTags, setRoasterTags }}>
