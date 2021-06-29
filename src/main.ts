@@ -18,7 +18,7 @@ export interface WarType {
 
 app.use(express.json())
 
-app.use(express.static('../client/build'))
+app.use(express.static('client/build'))
 
 app.listen(process.env.PORT || 5000)
 
