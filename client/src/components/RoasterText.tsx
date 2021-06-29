@@ -2,7 +2,7 @@ import { Dialog } from '@headlessui/react'
 import { ClipboardCopyIcon } from '@heroicons/react/solid'
 import Markdown from 'markdown-to-jsx'
 import { useState } from 'react'
-import { RoasterType } from '../../../server/src/utils/get_detailed_roaster'
+import { RoasterType } from '../../../src/utils/get_detailed_roaster'
 import Button from './Button'
 
 interface Props {

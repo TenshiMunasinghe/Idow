@@ -13,9 +13,9 @@ import {
 } from 'react'
 import { useForm } from 'react-hook-form'
 import { useHistory, useParams } from 'react-router-dom'
-import { WarType } from '../../../server/src/main'
-import { FormattedWar } from '../../../server/src/utils/format_war'
-import { RoasterType } from '../../../server/src/utils/get_detailed_roaster'
+import { WarType } from '../../../src/main'
+import { FormattedWar } from '../../../src/utils/format_war'
+import { RoasterType } from '../../../src/utils/get_detailed_roaster'
 import Button from '../components/Button'
 import FormGroup from '../components/FormGroup'
 import LoadingIcon from '../components/LoadingIcon'
@@ -85,9 +85,9 @@ const War = () => {
         await ky.put(`/api/war/${war.data?.id}`, { json: data })
         history.go(0)
       } else {
-        const newWar: FormattedWar = await ky
-          .post('/api/war', { json: data })
-          .json()
+        type NewType = FormattedWar
+
+        const newWar: NewType = await ky.post('/api/war', { json: data }).json()
         history.push(`/war/${newWar.id}`)
       }
     },

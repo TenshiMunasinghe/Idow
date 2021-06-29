@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
-import { FormattedWar } from '../../../server/src/utils/format_war'
+import { FormattedWar } from '../../../src/utils/format_war'
 import { dateToString } from '../utils/dateToString'
 
 interface Props {
