@@ -6,7 +6,10 @@
     "start": "node dist/main.js",
     "watch": "tsc -w",
     "dev": "npx nodemon dist/main.js",
-    "build": "tsc -p ./"
+    "build": "tsc -p ./",
+    "build-client": "cd client && yarn build",
+    "install-client": "cd client && yarn",
+    "heroku-postbuild": "yarn install-client && yarn build-client"
   },
   "repository": {
     "type": "git",
