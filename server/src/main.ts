@@ -20,7 +20,7 @@ app.use(express.json())
 
 app.use(express.static('../client/build'))
 
-app.listen(5000)
+app.listen(process.env.PORT || 5000)
 
 app.get('/api/players', async (req, res) => {
   const snapshot = await db.collection('players').get()
