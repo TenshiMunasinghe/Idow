@@ -1,7 +1,5 @@
 import * as firebase from 'firebase-admin'
 
-const serviceAccount = require('../../config/firebase.json')
-
 export type TimeStamp = firebase.firestore.Timestamp
 
 firebase.initializeApp({
@@ -13,7 +11,7 @@ firebase.initializeApp({
             'base64'
           ).toString('ascii')
         )
-      : serviceAccount
+      : require('../../config/firebase.json')
   ),
 })
 
