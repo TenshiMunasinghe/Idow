@@ -179,7 +179,7 @@ app.get('/api/wars', function (req, res) { return __awaiter(void 0, void 0, void
                 return [3 /*break*/, 3];
             case 2:
                 error_4 = _a.sent();
-                res.status(500).json({ error: 'Internal server error' });
+                res.status(500).json({ error: error_4 });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
