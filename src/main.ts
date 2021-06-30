@@ -6,8 +6,6 @@ import { FormattedWar, formatWar } from './utils/format_war'
 import { getDetailedRoaster } from './utils/get_detailed_roaster'
 import { toFirebaseWar } from './utils/to_firebase_war'
 
-const proxy = require('express-http-proxy')
-
 const app = express()
 
 export type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>
@@ -16,10 +14,6 @@ export interface WarType {
   opponent: string
   spin_time: TimeStamp
   roaster: string[]
-}
-
-if (process.env.NODE_ENV === 'production') {
-  app.use('/api', proxy(process.env.FIXIE_URL))
 }
 
 app.use(express.json())
