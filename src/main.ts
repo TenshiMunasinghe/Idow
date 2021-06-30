@@ -113,7 +113,7 @@ app.get('/api/wars', async (req, res) => {
 
     res.json(wars.docs.map(d => formatWar(d.data() as WarType, d.id)))
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' })
+    res.status(500).json({ error })
   }
 })
 
