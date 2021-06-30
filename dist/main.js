@@ -46,11 +46,7 @@ var firebase_1 = require("./utils/firebase");
 var format_war_1 = require("./utils/format_war");
 var get_detailed_roaster_1 = require("./utils/get_detailed_roaster");
 var to_firebase_war_1 = require("./utils/to_firebase_war");
-var proxy = require('express-http-proxy');
 var app = express_1.default();
-if (process.env.NODE_ENV === 'production') {
-    app.use('/api', proxy(process.env.FIXIE_URL));
-}
 app.use(express_1.default.json());
 app.use(express_1.default.static('client/build'));
 app.listen(process.env.PORT || 5000);
