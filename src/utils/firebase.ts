@@ -1,6 +1,6 @@
 import * as firebase from 'firebase-admin'
 
-const serviceAccount = require('../../config/firebase-test.json')
+const serviceAccount = require('../../config/firebase.json')
 
 export type TimeStamp = firebase.firestore.Timestamp
 
