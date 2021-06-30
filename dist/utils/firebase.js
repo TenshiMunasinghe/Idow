@@ -22,9 +22,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.toTimeStamp = exports.db = void 0;
 var firebase = __importStar(require("firebase-admin"));
 var serviceAccount = require('../../config/firebase.json');
-var environment = process.env.NODE_ENV === 'production' ? 'production' : 'test';
 firebase.initializeApp({
-    credential: firebase.credential.cert(serviceAccount[environment]),
+    credential: firebase.credential.cert(process.env.NODE_ENV === 'production'
+        ? JSON.parse(Buffer.from(process.env.FIREBASE_CONFIG_BASE64 || '', 'base64').toString('ascii'))
+        : serviceAccount),
 });
 exports.db = firebase.firestore();
 var toTimeStamp = function (date) {
