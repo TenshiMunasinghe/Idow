@@ -46,10 +46,17 @@ var firebase_1 = require("./utils/firebase");
 var format_war_1 = require("./utils/format_war");
 var get_detailed_roaster_1 = require("./utils/get_detailed_roaster");
 var to_firebase_war_1 = require("./utils/to_firebase_war");
+var http = require('http');
 var app = express_1.default();
 app.use(express_1.default.json());
+var server = http.createServer(app);
 app.use(express_1.default.static('client/build'));
-app.listen(process.env.PORT || 5000);
+if (process.env.NODE_ENV === 'production') {
+    server.listen(process.env.PORT, process.env.GURU301_IPS);
+}
+else {
+    server.listen(5000);
+}
 app.get('/api/players', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var snapshot, tags, players;
     return __generator(this, function (_a) {
