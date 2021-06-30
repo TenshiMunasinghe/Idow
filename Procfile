@@ -1,1 +1,1 @@
-web:yarn start
+web: bin/guru301 yarn start
