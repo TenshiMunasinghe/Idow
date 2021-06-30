@@ -219,7 +219,11 @@ dcClient.on('message', message => {
 
 export const login_bot = async () => {
   try {
-    await dcClient.login(parsed?.BOT_TOKEN)
+    await dcClient.login(
+      process.env.NODE_ENV === 'production'
+        ? process.env.BOT_TOKEN
+        : parsed?.BOT_TOKEN
+    )
   } catch (e) {
     console.error(e)
   }
