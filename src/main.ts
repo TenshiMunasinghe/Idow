@@ -5,6 +5,7 @@ import { db, TimeStamp, toTimeStamp } from './utils/firebase'
 import { FormattedWar, formatWar } from './utils/format_war'
 import { getDetailedRoaster } from './utils/get_detailed_roaster'
 import { toFirebaseWar } from './utils/to_firebase_war'
+const http = require('http')
 
 const app = express()
 
@@ -18,9 +19,15 @@ export interface WarType {
 
 app.use(express.json())
 
+const server = http.createServer(app)
+
 app.use(express.static('client/build'))
 
-app.listen(process.env.PORT || 5000)
+if (process.env.NODE_ENV === 'production') {
+  server.listen(process.env.PORT, process.env.GURU301_IPS)
+} else {
+  server.listen(5000)
+}
 
 app.get('/api/players', async (req, res) => {
   const snapshot = await db.collection('players').get()
