@@ -21,7 +21,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.toTimeStamp = exports.db = void 0;
 var firebase = __importStar(require("firebase-admin"));
-var serviceAccount = require('../../config/firebase-test.json');
+var serviceAccount = require('../../config/firebase.json');
 var environment = process.env.NODE_ENV === 'production' ? 'production' : 'test';
 firebase.initializeApp({
     credential: firebase.credential.cert(serviceAccount[environment]),

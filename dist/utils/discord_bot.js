@@ -307,7 +307,9 @@ var login_bot = function () { return __awaiter(void 0, void 0, void 0, function 
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, dcClient.login(config_1.parsed === null || config_1.parsed === void 0 ? void 0 : config_1.parsed.BOT_TOKEN)];
+                return [4 /*yield*/, dcClient.login(process.env.NODE_ENV === 'production'
+                        ? process.env.BOT_TOKEN
+                        : config_1.parsed === null || config_1.parsed === void 0 ? void 0 : config_1.parsed.BOT_TOKEN)];
             case 1:
                 _a.sent();
                 return [3 /*break*/, 3];
