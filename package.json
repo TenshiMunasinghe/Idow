@@ -9,7 +9,7 @@
     "build": "tsc -p ./",
     "build-client": "cd client && yarn build",
     "install-client": "cd client && yarn",
-    "heroku-postbuild": "yarn install-client && yarn build-client"
+    "heroku-postbuild": "yarn install-client && yarn build-client && yarn build"
   },
   "repository": {
     "type": "git",
