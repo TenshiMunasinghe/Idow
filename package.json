@@ -44,5 +44,8 @@
     "nodemon": "^2.0.7",
     "typescript": "^4.3.2"
   },
-  "description": ""
+  "description": "",
+  "engines": {
+    "node": "14"
+  }
 }
