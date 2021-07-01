@@ -1,7 +1,7 @@
 {
   "name": "idow",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "start": "node dist/main.js",
     "watch": "tsc -w",
@@ -46,6 +46,6 @@
   },
   "description": "",
   "engines": {
-    "node": "14.17.2"
+    "node": "14.17.0"
   }
 }
