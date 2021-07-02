@@ -83,13 +83,11 @@ const War = () => {
 
       if (war.data?.id) {
         await ky.put(`/api/war/${war.data?.id}`, { json: data })
-        history.go(0)
       } else {
-        type NewType = FormattedWar
-
-        const newWar: NewType = await ky.post('/api/war', { json: data }).json()
-        history.push(`/war/${newWar.id}`)
+        await ky.post('/api/war', { json: data })
       }
+      alert('更新しました。')
+      history.push('/')
     },
     [roasterTags, war.data?.spin_time, war.data?.id, history]
   )
