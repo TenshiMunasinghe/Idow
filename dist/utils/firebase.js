@@ -21,11 +21,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.toTimeStamp = exports.db = void 0;
 var firebase = __importStar(require("firebase-admin"));
-console.log('NODE ENV', process.env.NODE_ENV);
 firebase.initializeApp({
-    credential: firebase.credential.cert(process.env.NODE_ENV === 'production'
-        ? JSON.parse(Buffer.from(process.env.FIREBASE_CONFIG_BASE64 || '', 'base64').toString('ascii'))
-        : require('../../config/firebase.json')),
+    credential: firebase.credential.cert(process.env.NODE_ENV === 'development'
+        ? require('../../config/firebase.json')
+        : JSON.parse(Buffer.from(process.env.FIREBASE_CONFIG_BASE64 || '', 'base64').toString('ascii'))),
 });
 exports.db = firebase.firestore();
 var toTimeStamp = function (date) {
