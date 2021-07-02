@@ -57,7 +57,6 @@ app.put('/api/player/:tag', async (req, res) => {
 
     res.json({ name })
   } catch (error) {
-    console.log(error)
     if (error.statusCode === 404) {
       res.status(404).json({ error: 'INVALID_TAG' })
     } else {
@@ -89,7 +88,6 @@ app.delete('/api/player/:tag', async (req, res) => {
 
     res.json({ name })
   } catch (error) {
-    console.log(error)
     if (error.statusCode === 404) {
       res.status(404).json({ error: 'INVALID_TAG' })
     } else {

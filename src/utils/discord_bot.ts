@@ -71,8 +71,6 @@ const handlePlayers = async (
 
     const response = await Promise.all(promises)
 
-    console.log(response)
-
     const succeeded = response.filter(res => !res.error)
     const errorred = response.filter(res => res.error)
 
