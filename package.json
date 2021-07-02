@@ -9,7 +9,8 @@
     "build-server": "tsc -p ./",
     "build-client": "cd client && yarn build",
     "install-client": "cd client && yarn",
-    "build": "yarn && yarn install-client && yarn build-client"
+    "build": "yarn build-client",
+    "install": "yarn && yarn install-client"
   },
   "repository": {
     "type": "git",
