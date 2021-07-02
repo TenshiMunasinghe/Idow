@@ -4,15 +4,7 @@ import Navbar from './components/Navbar'
 import Home from './pages/home'
 import War from './pages/war'
 
-const client = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      retry: false,
-      staleTime: 1000 * 60 * 60 * 24,
-    },
-  },
-})
+const client = new QueryClient()
 
 const App = () => {
   return (
