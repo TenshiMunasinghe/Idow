@@ -2,6 +2,8 @@ import * as firebase from 'firebase-admin'
 
 export type TimeStamp = firebase.firestore.Timestamp
 
+console.log('NODE ENV', process.env.NODE_ENV)
+
 firebase.initializeApp({
   credential: firebase.credential.cert(
     process.env.NODE_ENV === 'production'
