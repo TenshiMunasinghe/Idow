@@ -6,9 +6,10 @@
     "start": "node dist/main.js",
     "watch": "tsc -w",
     "dev": " NODE_ENV='development' npx nodemon dist/main.js",
-    "build": "tsc -p ./",
+    "build-server": "tsc -p ./",
     "build-client": "cd client && yarn build",
-    "install-client": "cd client && yarn"
+    "install-client": "cd client && yarn",
+    "build": "yarn build-server && install-client && yarn build-client"
   },
   "repository": {
     "type": "git",
