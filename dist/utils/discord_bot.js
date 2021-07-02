@@ -142,7 +142,6 @@ var handlePlayers = function (message, option, args) { return __awaiter(void 0, 
                 return [4 /*yield*/, Promise.all(promises)];
             case 2:
                 response = _a.sent();
-                console.log(response);
                 succeeded = response.filter(function (res) { return !res.error; });
                 errorred = response.filter(function (res) { return res.error; });
                 erroredText = errorred.length > 0

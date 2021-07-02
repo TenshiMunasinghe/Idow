@@ -104,7 +104,6 @@ app.put('/api/player/:tag', function (req, res) { return __awaiter(void 0, void 
                 return [3 /*break*/, 6];
             case 5:
                 error_2 = _a.sent();
-                console.log(error_2);
                 if (error_2.statusCode === 404) {
                     res.status(404).json({ error: 'INVALID_TAG' });
                 }
@@ -147,7 +146,6 @@ app.delete('/api/player/:tag', function (req, res) { return __awaiter(void 0, vo
                 return [3 /*break*/, 6];
             case 5:
                 error_3 = _a.sent();
-                console.log(error_3);
                 if (error_3.statusCode === 404) {
                     res.status(404).json({ error: 'INVALID_TAG' });
                 }
