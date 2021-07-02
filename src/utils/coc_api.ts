@@ -2,6 +2,8 @@ import { parsed } from './config'
 
 const clashApi = require('clash-of-clans-api')
 
+console.log(process.env.NODE_ENV)
+
 const options =
   process.env.NODE_ENV === 'production'
     ? {
