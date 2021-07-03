@@ -20,7 +20,7 @@ app.use(express.json())
 
 app.use(express.static('client/build'))
 
-app.listen(process.env.PORT || 5000)
+app.listen(process.env.PORT || 80)
 
 app.get('/api/players', async (req, res) => {
   try {
@@ -161,9 +161,6 @@ app.delete('/api/war/:id', async (req, res) => {
     res.status(400).json({ error })
   }
 })
-
-if (process.env.NODE_ENV !== 'development') {
-  ;(async () => {
-    await login_bot()
-  })()
-}
+;(async () => {
+  await login_bot()
+})()
