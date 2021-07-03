@@ -76,7 +76,7 @@ var config_1 = __importDefault(require("./config"));
 var get_detailed_roaster_1 = require("./get_detailed_roaster");
 var presence_check_1 = require("./presence_check");
 var dcClient = new Discord.Client();
-var PREFIX = '!';
+var PREFIX = process.env.NODE_ENV === 'development' ? '?' : '!';
 var handleWar = function (message, args) { return __awaiter(void 0, void 0, void 0, function () {
     var war, data, _a;
     var _b;
