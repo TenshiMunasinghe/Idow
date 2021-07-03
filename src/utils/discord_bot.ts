@@ -1,4 +1,4 @@
-import _axios from 'axios'
+import axios from 'axios'
 import * as Discord from 'discord.js'
 import { parsed } from './config'
 import { FormattedWar } from './format_war'
@@ -6,8 +6,6 @@ import { DetailedWar, getDetailedRoaster } from './get_detailed_roaster'
 import { presenceCheck } from './presence_check'
 
 const dcClient = new Discord.Client()
-
-const axios = _axios.create({ baseURL: 'http://localhost:5000' })
 
 const PREFIX = '!'
 
