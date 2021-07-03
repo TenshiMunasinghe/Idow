@@ -110,11 +110,10 @@ const commands: Commands = {
       try {
         const wars = await axios.get<FormattedWar[]>('/api/wars')
 
-        const text = wars.data
-          .map((w: any) => `vs \`${w.opponent}\`\nWar_ID - \`${w.id}\``)
-          .join('\n\n')
-
-        message.channel.send(text)
+        for (const war of wars.data) {
+          message.channel.send(`vs \`${war.opponent}\``)
+          message.channel.send(`${war.id}`)
+        }
       } catch (e) {
         console.error(e)
       }
