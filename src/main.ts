@@ -161,6 +161,9 @@ app.delete('/api/war/:id', async (req, res) => {
     res.status(400).json({ error })
   }
 })
-;(async () => {
-  await login_bot()
-})()
+
+if (process.env.NODE_ENV !== 'development') {
+  ;(async () => {
+    await login_bot()
+  })()
+}
