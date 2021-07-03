@@ -131,20 +131,17 @@ const commands: Commands = {
       //  generates text like:
 
       // "TH14
-      // [player_name] @ [clan_name]
+      // [player_name]
       // ...
 
       // TH13
-      // [player_name] @ [clan_name]
+      // [player_name]
       // ..."
       const roaster = Object.keys(war.roaster)
         .sort((a, b) => parseInt(b) - parseInt(a))
         .map(
           th =>
-            `**TH${th}**\n` +
-            war.roaster[th]
-              .map(({ name, clan }) => `${name} @ ${clan.name}`)
-              .join('\n')
+            `**TH${th}**\n` + war.roaster[th].map(({ name }) => name).join('\n')
         )
         .join('\n\n')
 
