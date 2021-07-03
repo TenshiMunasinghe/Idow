@@ -1,5 +1,5 @@
 import { isArray } from 'lodash'
-import { parsed } from './config'
+import config from './config'
 import { Player, RoasterType } from './get_detailed_roaster'
 
 export const presenceCheck = (roaster: Player[] | RoasterType) => {
@@ -9,5 +9,5 @@ export const presenceCheck = (roaster: Player[] | RoasterType) => {
         return r.concat(roaster[k])
       }, [] as Player[])
 
-  return roasterArr.filter(m => m.clan.tag !== parsed?.CLAN_TAG)
+  return roasterArr.filter(m => m.clan.tag !== config?.CLAN_TAG)
 }

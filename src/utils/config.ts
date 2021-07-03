@@ -1,3 +1,5 @@
 import * as dotenv from 'dotenv'
 
-export const { error, parsed } = dotenv.config()
+const { parsed } = dotenv.config()
+
+export default process.env.NODE_ENV === 'development' ? parsed : process.env

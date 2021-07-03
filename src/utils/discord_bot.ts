@@ -1,6 +1,6 @@
 import axios from 'axios'
 import * as Discord from 'discord.js'
-import { parsed } from './config'
+import config from './config'
 import { FormattedWar } from './format_war'
 import { DetailedWar, getDetailedRoaster } from './get_detailed_roaster'
 import { presenceCheck } from './presence_check'
@@ -215,11 +215,7 @@ dcClient.on('message', message => {
 
 export const login_bot = async () => {
   try {
-    await dcClient.login(
-      process.env.NODE_ENV === 'development'
-        ? parsed?.BOT_TOKEN
-        : process.env.BOT_TOKEN
-    )
+    await dcClient.login(config?.BOT_TOKEN)
   } catch (e) {
     console.error(e)
   }
