@@ -10,25 +10,6 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -68,19 +49,23 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login_bot = void 0;
 var axios_1 = __importDefault(require("axios"));
 var Discord = __importStar(require("discord.js"));
 var config_1 = require("./config");
 var get_detailed_roaster_1 = require("./get_detailed_roaster");
 var presence_check_1 = require("./presence_check");
 var dcClient = new Discord.Client();
-var axios = axios_1.default.create({ baseURL: 'http://localhost:5000' });
 var PREFIX = '!';
 var handleWar = function (message, args) { return __awaiter(void 0, void 0, void 0, function () {
-    var war, data, _a;
-    var _b;
+    var war, data, _a, _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
@@ -88,7 +73,7 @@ var handleWar = function (message, args) { return __awaiter(void 0, void 0, void
                     message.channel.send('War_IDを入力してください\n例: `!roaster <War_ID>`');
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, axios.get("/api/war/" + args[0])];
+                return [4 /*yield*/, axios_1.default.get("/api/war/" + args[0])];
             case 1:
                 war = _c.sent();
                 data = war.data;
@@ -120,7 +105,7 @@ var handlePlayers = function (message, option, args) { return __awaiter(void 0, 
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                requestHandler_1 = option === 'add' ? axios.put : axios.delete;
+                requestHandler_1 = option === 'add' ? axios_1.default.put : axios_1.default.delete;
                 promises = args.map(function (tag) { return __awaiter(void 0, void 0, void 0, function () {
                     var data, _a, response_1;
                     return __generator(this, function (_b) {
@@ -180,7 +165,7 @@ var commands = {
                     switch (_a.label) {
                         case 0:
                             _a.trys.push([0, 2, , 3]);
-                            return [4 /*yield*/, axios.get('/api/wars')];
+                            return [4 /*yield*/, axios_1.default.get('/api/wars')];
                         case 1:
                             wars = _a.sent();
                             text = wars.data
@@ -277,7 +262,6 @@ var commands = {
             });
         },
         description: '移動確認',
-        //TODO: add player and filter possible errors eg: extra space, missing '#'
     },
 };
 var commandKeys = Object.keys(commands);
@@ -300,24 +284,23 @@ dcClient.on('message', function (message) {
     }
     commands[command].action(message, args);
 });
-var login_bot = function () { return __awaiter(void 0, void 0, void 0, function () {
+exports.login_bot = function () { return __awaiter(void 0, void 0, void 0, function () {
     var e_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _b.trys.push([0, 2, , 3]);
                 return [4 /*yield*/, dcClient.login(process.env.NODE_ENV === 'development'
-                        ? config_1.parsed === null || config_1.parsed === void 0 ? void 0 : config_1.parsed.BOT_TOKEN
-                        : process.env.BOT_TOKEN)];
+                        ? (_a = config_1.parsed) === null || _a === void 0 ? void 0 : _a.BOT_TOKEN : process.env.BOT_TOKEN)];
             case 1:
-                _a.sent();
+                _b.sent();
                 return [3 /*break*/, 3];
             case 2:
-                e_2 = _a.sent();
+                e_2 = _b.sent();
                 console.error(e_2);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); };
-exports.login_bot = login_bot;
