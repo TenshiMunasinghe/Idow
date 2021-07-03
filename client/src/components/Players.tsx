@@ -9,7 +9,7 @@ interface Props {
   players: Player[]
 }
 
-const TH_COLORS: { [key: number]: string } = {
+export const TH_COLORS: { [key: number]: string } = {
   11: 'text-red-300',
   12: 'text-cyan-300',
   13: 'text-blue-300',
