@@ -15,6 +15,7 @@ import { useForm } from 'react-hook-form'
 import { useHistory, useParams } from 'react-router-dom'
 import { WarType } from '../../../src/main'
 import { FormattedWar } from '../../../src/utils/format_war'
+import { RoasterType } from '../../../src/utils/get_detailed_roaster'
 import Button from '../components/Button'
 import FormGroup from '../components/FormGroup'
 import LoadingIcon from '../components/LoadingIcon'
@@ -194,7 +195,18 @@ const War = () => {
                 )}
               </form>
             </div>
-            <RoasterText townHalls={townHalls} roaster={players.data} />
+            <RoasterText
+              roaster={Object.keys(players.data).reduce((obj, th) => {
+                const playerDetails = players.data[th].filter(player =>
+                  roasterTags.includes(player.tag)
+                )
+                if (playerDetails.length === 0) return obj
+
+                obj[th] = playerDetails
+
+                return obj
+              }, {} as RoasterType)}
+            />
           </div>
         </context.Provider>
       )}
