@@ -212,13 +212,10 @@ var commands = {
                             roaster = Object.keys(war.roaster)
                                 .sort(function (a, b) { return parseInt(b) - parseInt(a); })
                                 .map(function (th) {
-                                return "**TH" + th + "**\n" +
-                                    war.roaster[th]
-                                        .map(function (_a) {
-                                        var name = _a.name, clan = _a.clan;
-                                        return name + " @ " + clan.name;
-                                    })
-                                        .join('\n');
+                                return "**TH" + th + "**\n" + war.roaster[th].map(function (_a) {
+                                    var name = _a.name;
+                                    return name;
+                                }).join('\n');
                             })
                                 .join('\n\n');
                             message.channel.send("vs **" + war.opponent + "**\n\n" + roaster);
