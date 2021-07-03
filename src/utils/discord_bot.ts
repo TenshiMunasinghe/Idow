@@ -7,7 +7,7 @@ import { presenceCheck } from './presence_check'
 
 const dcClient = new Discord.Client()
 
-const PREFIX = '!'
+const PREFIX = process.env.NODE_ENV === 'development' ? '?' : '!'
 
 type Commands = {
   [key: string]: {
