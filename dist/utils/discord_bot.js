@@ -10,6 +10,25 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -49,23 +68,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.login_bot = void 0;
 var axios_1 = __importDefault(require("axios"));
 var Discord = __importStar(require("discord.js"));
-var config_1 = require("./config");
+var config_1 = __importDefault(require("./config"));
 var get_detailed_roaster_1 = require("./get_detailed_roaster");
 var presence_check_1 = require("./presence_check");
 var dcClient = new Discord.Client();
 var PREFIX = '!';
 var handleWar = function (message, args) { return __awaiter(void 0, void 0, void 0, function () {
-    var war, data, _a, _b;
+    var war, data, _a;
+    var _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
@@ -262,6 +276,7 @@ var commands = {
             });
         },
         description: '移動確認',
+        //TODO: add player and filter possible errors eg: extra space, missing '#'
     },
 };
 var commandKeys = Object.keys(commands);
@@ -284,23 +299,22 @@ dcClient.on('message', function (message) {
     }
     commands[command].action(message, args);
 });
-exports.login_bot = function () { return __awaiter(void 0, void 0, void 0, function () {
+var login_bot = function () { return __awaiter(void 0, void 0, void 0, function () {
     var e_2;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                _b.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, dcClient.login(process.env.NODE_ENV === 'development'
-                        ? (_a = config_1.parsed) === null || _a === void 0 ? void 0 : _a.BOT_TOKEN : process.env.BOT_TOKEN)];
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, dcClient.login(config_1.default === null || config_1.default === void 0 ? void 0 : config_1.default.BOT_TOKEN)];
             case 1:
-                _b.sent();
+                _a.sent();
                 return [3 /*break*/, 3];
             case 2:
-                e_2 = _b.sent();
+                e_2 = _a.sent();
                 console.error(e_2);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); };
+exports.login_bot = login_bot;
