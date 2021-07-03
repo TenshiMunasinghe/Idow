@@ -174,21 +174,22 @@ var commands = {
     wars: {
         action: function (message) {
             return __awaiter(this, void 0, void 0, function () {
-                var wars, text, e_1;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
+                var wars, _i, _a, war, e_1;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
                         case 0:
-                            _a.trys.push([0, 2, , 3]);
+                            _b.trys.push([0, 2, , 3]);
                             return [4 /*yield*/, axios_1.default.get('/api/wars')];
                         case 1:
-                            wars = _a.sent();
-                            text = wars.data
-                                .map(function (w) { return "vs `" + w.opponent + "`\nWar_ID - `" + w.id + "`"; })
-                                .join('\n\n');
-                            message.channel.send(text);
+                            wars = _b.sent();
+                            for (_i = 0, _a = wars.data; _i < _a.length; _i++) {
+                                war = _a[_i];
+                                message.channel.send("vs `" + war.opponent + "`");
+                                message.channel.send("" + war.id);
+                            }
                             return [3 /*break*/, 3];
                         case 2:
-                            e_1 = _a.sent();
+                            e_1 = _b.sent();
                             console.error(e_1);
                             return [3 /*break*/, 3];
                         case 3: return [2 /*return*/];
