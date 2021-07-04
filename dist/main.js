@@ -40,6 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
+var path_1 = __importDefault(require("path"));
 var coc_api_1 = require("./utils/coc_api");
 var discord_bot_1 = require("./utils/discord_bot");
 var firebase_1 = require("./utils/firebase");
@@ -273,6 +274,11 @@ app.delete('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0
         }
     });
 }); });
+app.get('/*', function (req, res) {
+    res.sendFile('index.html', {
+        root: path_1.default.join(__dirname, '../client/build/'),
+    });
+});
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
