@@ -1,4 +1,5 @@
 import express from 'express'
+import path from 'path'
 import { cocClient } from './utils/coc_api'
 import { login_bot } from './utils/discord_bot'
 import { db, TimeStamp, toTimeStamp } from './utils/firebase'
@@ -160,6 +161,12 @@ app.delete('/api/war/:id', async (req, res) => {
   } catch (error) {
     res.status(400).json({ error })
   }
+})
+
+app.get('/*', (req, res) => {
+  res.sendFile('index.html', {
+    root: path.join(__dirname, '../client/build/'),
+  })
 })
 ;(async () => {
   await login_bot()
