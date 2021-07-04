@@ -86,8 +86,7 @@ const War = () => {
       } else {
         await ky.post('/api/war', { json: data })
       }
-      alert('更新しました。')
-      history.push('/')
+      history.go(0)
     },
     [roasterTags, war.data?.spin_time, war.data?.id, history]
   )
