@@ -265,7 +265,7 @@ var commands = {
                             text = absentCount === 0
                                 ? '全員集合してます！'
                                 : absentPlayers
-                                    .map(function (p) { return "`" + p.name + "`@`" + p.clan.name + "`"; })
+                                    .map(function (p) { var _a; return "`" + p.name + "`@`" + (((_a = p.clan) === null || _a === void 0 ? void 0 : _a.name) || '無所属') + "`"; })
                                     .join('\n') + ("\n\n**" + absentCount + "\u4EBA**\u3044\u306A\u3044\u3067\u3059\u3002");
                             message.channel.send("vs **" + war.opponent + "**\n\n" + text);
                             return [2 /*return*/];
