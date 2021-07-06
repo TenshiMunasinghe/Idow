@@ -6,7 +6,7 @@ export interface Player {
   clan: {
     name: string
     tag: string
-  }
+  } | null
   townHallLevel: number
   tag: string
   name: string
@@ -24,17 +24,23 @@ export const getDetailedRoaster = async (roaster: string[]) => {
   const playersPromise: Promise<Player>[] = roaster.map(async (m: string) => {
     const { clan, townHallLevel, tag, name } = await cocClient.playerByTag(m)
     return {
-      clan: {
-        name: clan.name,
-        tag: clan.tag,
-      },
+      clan: clan
+        ? {
+            name: clan.name,
+            tag: clan.tag,
+          }
+        : null,
       townHallLevel,
       tag,
       name,
     } as Player
   })
 
-  const players = await Promise.all(playersPromise)
+  try {
+    const players = await Promise.all(playersPromise)
 
-  return groupBy(players, 'townHallLevel') as RoasterType
+    return groupBy(players, 'townHallLevel') as RoasterType
+  } catch (e) {
+    console.error(e)
+  }
 }

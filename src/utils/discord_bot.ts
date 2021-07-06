@@ -177,7 +177,7 @@ const commands: Commands = {
         absentCount === 0
           ? '全員集合してます！'
           : absentPlayers
-              .map(p => `\`${p.name}\`@\`${p.clan.name}\``)
+              .map(p => `\`${p.name}\`@\`${p.clan?.name || '無所属'}\``)
               .join('\n') + `\n\n**${absentCount}人**いないです。`
 
       message.channel.send(`vs **${war.opponent}**\n\n` + text)
