@@ -12,6 +12,6 @@ var presenceCheck = function (roaster) {
         : Object.keys(roaster).reduce(function (r, k) {
             return r.concat(roaster[k]);
         }, []);
-    return roasterArr.filter(function (m) { return m.clan.tag !== (config_1.default === null || config_1.default === void 0 ? void 0 : config_1.default.CLAN_TAG); });
+    return roasterArr.filter(function (m) { var _a; return ((_a = m.clan) === null || _a === void 0 ? void 0 : _a.tag) !== (config_1.default === null || config_1.default === void 0 ? void 0 : config_1.default.CLAN_TAG); });
 };
 exports.presenceCheck = presenceCheck;
