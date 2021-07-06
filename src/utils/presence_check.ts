@@ -9,5 +9,5 @@ export const presenceCheck = (roaster: Player[] | RoasterType) => {
         return r.concat(roaster[k])
       }, [] as Player[])
 
-  return roasterArr.filter(m => m.clan.tag !== config?.CLAN_TAG)
+  return roasterArr.filter(m => m.clan?.tag !== config?.CLAN_TAG)
 }
