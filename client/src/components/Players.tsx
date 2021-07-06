@@ -61,27 +61,30 @@ const Players = ({ townHall, players }: Props) => {
           <Disclosure.Panel
             as='ul'
             className='my-2 px-5 divide-y-2 divide-gray-700'>
-            {players.map(player => (
-              <li
-                key={player.tag}
-                className='flex justify-between items-center py-3'>
-                {isEditMode ? (
-                  <>
-                    <label>{player.name}</label>
-                    <input
-                      className='text-violet-600 w-5 h-5 rounded-sm focus:outline-none focus:ring-2 focus:ring-violet-600 ml-2'
-                      type='checkbox'
-                      name={player.name}
-                      value={player.tag}
-                      checked={isInRoaster(player.tag)}
-                      onChange={onChange}
-                    />
-                  </>
-                ) : (
-                  isInRoaster(player.tag) && <span>{player.name}</span>
-                )}
-              </li>
-            ))}
+            {players.map(
+              player =>
+                (isEditMode || isInRoaster(player.tag)) && (
+                  <li
+                    key={player.tag}
+                    className='flex justify-between items-center py-3'>
+                    {isEditMode ? (
+                      <>
+                        <label>{player.name}</label>
+                        <input
+                          className='text-violet-600 w-5 h-5 rounded-sm focus:outline-none focus:ring-2 focus:ring-violet-600 ml-2'
+                          type='checkbox'
+                          name={player.name}
+                          value={player.tag}
+                          checked={isInRoaster(player.tag)}
+                          onChange={onChange}
+                        />
+                      </>
+                    ) : (
+                      <span>{player.name}</span>
+                    )}
+                  </li>
+                )
+            )}
           </Disclosure.Panel>
         </>
       )}
