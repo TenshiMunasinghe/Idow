@@ -7,12 +7,12 @@ interface Props {
 
 const RoasterText = ({ roaster }: Props) => {
   return (
-    <p className='bg-gray-800 px-3 py-5 rounded w-full space-y-4'>
+    <div className='bg-gray-800 px-3 py-5 rounded w-full space-y-4'>
       {Object.keys(roaster)
         .map(key => parseInt(key))
         .sort((a, b) => b - a)
         .map(th => (
-          <div className='flex flex-col space-y-1'>
+          <p className='flex flex-col space-y-1' key={'text' + th}>
             <span
               className={`font-bold text-lg ${
                 TH_COLORS[th] || 'text-gray-300'
@@ -20,11 +20,11 @@ const RoasterText = ({ roaster }: Props) => {
               TH{th}
             </span>
             {roaster[th].map(({ name }) => (
-              <span>{name}</span>
+              <span key={name}>{name}</span>
             ))}
-          </div>
+          </p>
         ))}
-    </p>
+    </div>
   )
 }
 
