@@ -37,13 +37,13 @@ interface Context {
   setRoasterTags: Dispatch<SetStateAction<RoasterTags>>
 }
 
-const currentDate = new Date().toISOString().split('.')[0].slice(0, -3)
-
 export const context = createContext<Context>({
   isEditMode: false,
   roasterTags: [],
   setRoasterTags: () => {},
 })
+
+const currentDate = new Date().toISOString().split('.')[0].slice(0, -3)
 
 const War = () => {
   const { id } = useParams<{ id: string }>()
@@ -68,7 +68,8 @@ const War = () => {
 
   const onSubmit = useCallback(
     async (values: FormData) => {
-      const spin_time = values.spin_time || war.data?.spin_time
+      const spin_time =
+        new Date(values.spin_time).toISOString() || war.data?.spin_time
 
       if (!spin_time) {
         alert('マッチング時間を入力してください')
@@ -83,10 +84,11 @@ const War = () => {
 
       if (war.data?.id) {
         await ky.put(`/api/war/${war.data?.id}`, { json: data })
+        history.go(0)
       } else {
         await ky.post('/api/war', { json: data })
+        history.push('/')
       }
-      history.go(0)
     },
     [roasterTags, war.data?.spin_time, war.data?.id, history]
   )
@@ -181,8 +183,8 @@ const War = () => {
                   isEditMode={isEditMode}
                   register={register('spin_time')}
                   currentValue={dateToString(new Date(war.data.spin_time))}
-                  min={currentDate}
                   required={false}
+                  min={currentDate}
                 />
 
                 <Roaster townHalls={townHalls} roaster={players.data} />
