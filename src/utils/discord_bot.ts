@@ -202,7 +202,6 @@ dcClient.on('message', message => {
   if (!command) return
 
   if (!Object.keys(commands).includes(command)) {
-    message.channel.send('(そんなコマンド)ないです。')
     return
   }
 
