@@ -18,7 +18,7 @@ const Roaster = ({ townHalls, roaster }: Props) => {
         計 {roasterTags?.length}
       </div>
       {townHalls.map(th => (
-        <Players key={th} townHall={th} players={roaster[th]} />
+        <Players key={'players' + th} townHall={th} players={roaster[th]} />
       ))}
     </div>
   )
