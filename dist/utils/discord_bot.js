@@ -292,7 +292,6 @@ dcClient.on('message', function (message) {
     if (!command)
         return;
     if (!Object.keys(commands).includes(command)) {
-        message.channel.send('(そんなコマンド)ないです。');
         return;
     }
     commands[command].action(message, args);
