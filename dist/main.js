@@ -75,7 +75,7 @@ app.get('/api/players', function (req, res) { return __awaiter(void 0, void 0, v
     });
 }); });
 app.put('/api/player/:tag', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var tag, name_1, collection, doc, error_2;
+    var tag, name_1, collection, doc, e_1, error;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -104,12 +104,13 @@ app.put('/api/player/:tag', function (req, res) { return __awaiter(void 0, void 
                 res.json({ name: name_1 });
                 return [3 /*break*/, 6];
             case 5:
-                error_2 = _a.sent();
-                if (error_2.statusCode === 404) {
+                e_1 = _a.sent();
+                error = e_1;
+                if (error.statusCode === 404) {
                     res.status(404).json({ error: 'INVALID_TAG' });
                 }
                 else {
-                    res.status(500).json({ error: error_2 });
+                    res.status(500).json({ error: error });
                 }
                 return [3 /*break*/, 6];
             case 6: return [2 /*return*/];
@@ -117,7 +118,7 @@ app.put('/api/player/:tag', function (req, res) { return __awaiter(void 0, void 
     });
 }); });
 app.delete('/api/player/:tag', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var tag, name_2, collection, doc, error_3;
+    var tag, name_2, collection, doc, e_2, error;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -146,12 +147,13 @@ app.delete('/api/player/:tag', function (req, res) { return __awaiter(void 0, vo
                 res.json({ name: name_2 });
                 return [3 /*break*/, 6];
             case 5:
-                error_3 = _a.sent();
-                if (error_3.statusCode === 404) {
+                e_2 = _a.sent();
+                error = e_2;
+                if (error.statusCode === 404) {
                     res.status(404).json({ error: 'INVALID_TAG' });
                 }
                 else {
-                    res.status(500).json({ error: error_3 });
+                    res.status(500).json({ error: error });
                 }
                 return [3 /*break*/, 6];
             case 6: return [2 /*return*/];
@@ -159,7 +161,7 @@ app.delete('/api/player/:tag', function (req, res) { return __awaiter(void 0, vo
     });
 }); });
 app.get('/api/wars', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var wars, error_4;
+    var wars, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -173,8 +175,8 @@ app.get('/api/wars', function (req, res) { return __awaiter(void 0, void 0, void
                 res.json(wars.docs.map(function (d) { return format_war_1.formatWar(d.data(), d.id); }));
                 return [3 /*break*/, 3];
             case 2:
-                error_4 = _a.sent();
-                res.status(500).json({ error: error_4 });
+                error_2 = _a.sent();
+                res.status(500).json({ error: error_2 });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -212,7 +214,7 @@ app.get('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, v
     });
 }); });
 app.post('/api/war', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var war, newWar, error_5;
+    var war, newWar, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -225,15 +227,15 @@ app.post('/api/war', function (req, res) { return __awaiter(void 0, void 0, void
                 res.json(format_war_1.formatWar(newWar.data(), newWar.id));
                 return [3 /*break*/, 4];
             case 3:
-                error_5 = _a.sent();
-                res.status(400).json({ error: error_5 });
+                error_3 = _a.sent();
+                res.status(400).json({ error: error_3 });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); });
 app.put('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var war, updatedWar, error_6;
+    var war, updatedWar, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -248,15 +250,15 @@ app.put('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, v
                 res.json("Updated at " + updatedWar.writeTime.toDate().toString());
                 return [3 /*break*/, 3];
             case 2:
-                error_6 = _a.sent();
-                res.status(400).json({ error: error_6 });
+                error_4 = _a.sent();
+                res.status(400).json({ error: error_4 });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); });
 app.delete('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var deleted, error_7;
+    var deleted, error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -267,8 +269,8 @@ app.delete('/api/war/:id', function (req, res) { return __awaiter(void 0, void 0
                 res.json("Deleted at " + deleted.writeTime.toDate().toString());
                 return [3 /*break*/, 3];
             case 2:
-                error_7 = _a.sent();
-                res.status(400).json({ error: error_7 });
+                error_5 = _a.sent();
+                res.status(400).json({ error: error_5 });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }

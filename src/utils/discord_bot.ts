@@ -62,8 +62,9 @@ const handlePlayers = async (
           `/api/player/${tag.replace('#', '%23')}`
         )
         return { ...data, tag }
-      } catch ({ response }) {
-        return { ...response.data, tag }
+      } catch (e) {
+        const error = e as any
+        return { ...error.response.data, tag }
       }
     })
 
@@ -118,7 +119,7 @@ const commands: Commands = {
         console.error(e)
       }
     },
-    description: '対戦一覧: `<War_ID>`',
+    description: '対戦一覧',
   },
 
   roaster: {

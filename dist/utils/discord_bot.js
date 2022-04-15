@@ -121,19 +121,19 @@ var handlePlayers = function (message, option, args) { return __awaiter(void 0, 
                 _a.trys.push([1, 3, , 4]);
                 requestHandler_1 = option === 'add' ? axios_1.default.put : axios_1.default.delete;
                 promises = args.map(function (tag) { return __awaiter(void 0, void 0, void 0, function () {
-                    var data, _a, response_1;
-                    return __generator(this, function (_b) {
-                        switch (_b.label) {
+                    var data, e_1, error;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
                             case 0:
-                                _b.trys.push([0, 2, , 3]);
+                                _a.trys.push([0, 2, , 3]);
                                 return [4 /*yield*/, requestHandler_1("/api/player/" + tag.replace('#', '%23'))];
                             case 1:
-                                data = (_b.sent()).data;
+                                data = (_a.sent()).data;
                                 return [2 /*return*/, __assign(__assign({}, data), { tag: tag })];
                             case 2:
-                                _a = _b.sent();
-                                response_1 = _a.response;
-                                return [2 /*return*/, __assign(__assign({}, response_1.data), { tag: tag })];
+                                e_1 = _a.sent();
+                                error = e_1;
+                                return [2 /*return*/, __assign(__assign({}, error.response.data), { tag: tag })];
                             case 3: return [2 /*return*/];
                         }
                     });
@@ -174,7 +174,7 @@ var commands = {
     wars: {
         action: function (message) {
             return __awaiter(this, void 0, void 0, function () {
-                var wars, _i, _a, war, e_1;
+                var wars, _i, _a, war, e_2;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
@@ -189,15 +189,15 @@ var commands = {
                             }
                             return [3 /*break*/, 3];
                         case 2:
-                            e_1 = _b.sent();
-                            console.error(e_1);
+                            e_2 = _b.sent();
+                            console.error(e_2);
                             return [3 /*break*/, 3];
                         case 3: return [2 /*return*/];
                     }
                 });
             });
         },
-        description: '対戦一覧: `<War_ID>`',
+        description: '対戦一覧',
     },
     roaster: {
         action: function (message, args) {
@@ -297,7 +297,7 @@ dcClient.on('message', function (message) {
     commands[command].action(message, args);
 });
 var login_bot = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var e_2;
+    var e_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -307,8 +307,8 @@ var login_bot = function () { return __awaiter(void 0, void 0, void 0, function 
                 _a.sent();
                 return [3 /*break*/, 3];
             case 2:
-                e_2 = _a.sent();
-                console.error(e_2);
+                e_3 = _a.sent();
+                console.error(e_3);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }

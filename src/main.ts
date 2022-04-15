@@ -57,7 +57,8 @@ app.put('/api/player/:tag', async (req, res) => {
     await collection.add({ player_tag: tag })
 
     res.json({ name })
-  } catch (error) {
+  } catch (e) {
+    const error = e as any
     if (error.statusCode === 404) {
       res.status(404).json({ error: 'INVALID_TAG' })
     } else {
@@ -88,7 +89,9 @@ app.delete('/api/player/:tag', async (req, res) => {
     await doc.docs[0].ref.delete()
 
     res.json({ name })
-  } catch (error) {
+  } catch (e) {
+    const error = e as any
+
     if (error.statusCode === 404) {
       res.status(404).json({ error: 'INVALID_TAG' })
     } else {
