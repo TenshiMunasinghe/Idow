@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node dist/main.js",
     "watch": "tsc -w",
-    "dev": " NODE_ENV='development' npx nodemon dist/main.js",
+    "dev": "NODE_ENV='development' npx nodemon dist/main.js",
     "build-server": "tsc -p ./",
     "build-client": "cd client && yarn build",
     "install-client": "cd client && yarn",
