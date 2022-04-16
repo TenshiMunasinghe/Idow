@@ -43,7 +43,7 @@ exports.getDetailedRoaster = void 0;
 var groupBy_1 = __importDefault(require("lodash/groupBy"));
 var coc_api_1 = require("./coc_api");
 var getDetailedRoaster = function (roaster) { return __awaiter(void 0, void 0, void 0, function () {
-    var playersPromise, players, e_1;
+    var playersPromise, players, successfulRes, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -71,10 +71,13 @@ var getDetailedRoaster = function (roaster) { return __awaiter(void 0, void 0, v
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, Promise.all(playersPromise)];
+                return [4 /*yield*/, Promise.allSettled(playersPromise)];
             case 2:
                 players = _a.sent();
-                return [2 /*return*/, groupBy_1.default(players, 'townHallLevel')];
+                successfulRes = players
+                    .filter(function (res) { return res.status === 'fulfilled'; })
+                    .map(function (res) { return res.value; });
+                return [2 /*return*/, groupBy_1.default(successfulRes, 'townHallLevel')];
             case 3:
                 e_1 = _a.sent();
                 console.error(e_1);
