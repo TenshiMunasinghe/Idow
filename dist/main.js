@@ -75,7 +75,7 @@ app.get('/api/players', function (req, res) { return __awaiter(void 0, void 0, v
     });
 }); });
 app.put('/api/player/:tag', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var tag, name_1, collection, doc, e_1, error;
+    var tag, name, collection, doc, e_1, error;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -89,7 +89,7 @@ app.put('/api/player/:tag', function (req, res) { return __awaiter(void 0, void 
                 _a.trys.push([1, 5, , 6]);
                 return [4 /*yield*/, coc_api_1.cocClient.playerByTag(tag)];
             case 2:
-                name_1 = (_a.sent()).name;
+                name = (_a.sent()).name;
                 collection = firebase_1.db.collection('players');
                 return [4 /*yield*/, collection.where('player_tag', '==', tag).get()];
             case 3:
@@ -101,7 +101,7 @@ app.put('/api/player/:tag', function (req, res) { return __awaiter(void 0, void 
                 return [4 /*yield*/, collection.add({ player_tag: tag })];
             case 4:
                 _a.sent();
-                res.json({ name: name_1 });
+                res.json({ name: name });
                 return [3 /*break*/, 6];
             case 5:
                 e_1 = _a.sent();
@@ -118,7 +118,7 @@ app.put('/api/player/:tag', function (req, res) { return __awaiter(void 0, void 
     });
 }); });
 app.delete('/api/player/:tag', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var tag, name_2, collection, doc, e_2, error;
+    var tag, name, collection, doc, e_2, error;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -132,7 +132,7 @@ app.delete('/api/player/:tag', function (req, res) { return __awaiter(void 0, vo
                 _a.trys.push([1, 5, , 6]);
                 return [4 /*yield*/, coc_api_1.cocClient.playerByTag(tag)];
             case 2:
-                name_2 = (_a.sent()).name;
+                name = (_a.sent()).name;
                 collection = firebase_1.db.collection('players');
                 return [4 /*yield*/, collection.where('player_tag', '==', tag).get()];
             case 3:
@@ -144,7 +144,7 @@ app.delete('/api/player/:tag', function (req, res) { return __awaiter(void 0, vo
                 return [4 /*yield*/, doc.docs[0].ref.delete()];
             case 4:
                 _a.sent();
-                res.json({ name: name_2 });
+                res.json({ name: name });
                 return [3 /*break*/, 6];
             case 5:
                 e_2 = _a.sent();
