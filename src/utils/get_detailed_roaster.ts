@@ -36,15 +36,11 @@ export const getDetailedRoaster = async (roaster: string[]) => {
     } as Player
   })
 
-  try {
-    const players = await Promise.allSettled(playersPromise)
+  const players = await Promise.allSettled(playersPromise)
 
-    const successfulRes = players
-      .filter(res => res.status === 'fulfilled')
-      .map((res: any) => res.value)
+  const successfulRes = players
+    .filter(res => res.status === 'fulfilled')
+    .map((res: any) => res.value)
 
-    return groupBy(successfulRes, 'townHallLevel') as RoasterType
-  } catch (e) {
-    console.error(e)
-  }
+  return groupBy(successfulRes, 'townHallLevel') as RoasterType
 }
